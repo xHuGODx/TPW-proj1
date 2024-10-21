@@ -12,5 +12,3 @@
 | Superuser | Password |
 |:---|:---:|
 | admin | admin123 |
-
-shit
