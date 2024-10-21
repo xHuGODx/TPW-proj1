@@ -7,3 +7,8 @@
 | Inês | xxxxxx |
 | Hugo Ribeiro | 113402 |
 | Eduardo Lopes | 103070 |
+
+
+| Superuser | Password |
+|:---|:---:|
+| admin | admin123 |

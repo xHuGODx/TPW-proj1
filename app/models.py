@@ -1,6 +1,4 @@
 from django.db import models
-from django.contrib.auth.hashers import make_password
-#usar futuramente para fazer a encriptação da password
 
 # Custom User Model
 class User(models.Model):
@@ -23,13 +21,12 @@ class User(models.Model):
         self.image = file
         self.save()
 
-
 # Product Model
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=70)
     description = models.TextField(null=True, blank=True)
-    price = models.FloatField(max_length=10, default=0.00)
+    price = models.FloatField(default=0.00)
     image = models.ImageField(upload_to='product_images/', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
     seen = models.IntegerField(default=0)
@@ -44,15 +41,9 @@ class Product(models.Model):
     def get_image(self):
         """Return the sold version of the image if the product is sold."""
         if self.sold and self.image:
+            #implementar funcao que cria a imagem nova.
             return self.image.url.replace(".png", "_sold.png")
         return self.image.url if self.image else None
-
-
-    """
-    Como usar no codigo:
-    <img src="{{ product.get_image }}" alt="{{ product.name }}">
-    """
-
 
 # Comment Model for user profiles
 class Comment(models.Model):
@@ -65,7 +56,6 @@ class Comment(models.Model):
     def __str__(self):
         return f"Comment by {self.user.name} on {self.seller.name}"
 
-
 # Follower Model to track user followers
 class Follower(models.Model):
     id = models.AutoField(primary_key=True)
@@ -74,7 +64,6 @@ class Follower(models.Model):
 
     def __str__(self):
         return f"{self.follower.name} follows {self.followed.name}"
-
 
 # Favorite Model to track user favorite products
 class Favorite(models.Model):
@@ -85,24 +74,17 @@ class Favorite(models.Model):
     def __str__(self):
         return f"{self.user.name} likes {self.product.name}"
 
-
-# CartItem Model for individual items in the cart
-class CartItem(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price = models.FloatField(max_length=10, default=0.00)
-
-    def __str__(self):
-        return f"{self.product.name} (Price: {self.price})"
-
-
 # Cart Model to manage user's cart and total price
 class Cart(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart')
-    items = models.ManyToManyField(CartItem)
-    total_price = models.FloatField(max_length=10, default=0.00)
+    products = models.ManyToManyField(Product)  # Use Product directly
+    total_price = models.FloatField(default=0.00)
 
     def __str__(self):
         return f"Cart {self.id} for {self.user.name} with total price: {self.total_price}"
+
+    def calculate_total_price(self):
+        """Calculate the total price of products in the cart."""
+        self.total_price = sum(product.price for product in self.products.all())
+        self.save()
