@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from datetime import datetime
+from app.models import *
 
 
 # Create your views here.
@@ -28,3 +29,11 @@ def about(request):
         'year': datetime.now().year,
     }
     return render(request, 'about.html', tparams)
+
+def profile(request):
+    if request.method == 'GET':
+        user = User.objects.get(username=request.user.username)
+        followers = user.followers.all()
+        following = user.following.all()
+
+        return render(request, 'profile.html', {'user': user, 'followers': followers, 'following': following})
