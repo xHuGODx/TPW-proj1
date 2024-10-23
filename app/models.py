@@ -74,3 +74,12 @@ class Order(models.Model):
         """Calculate the total price of products in the order."""
         self.total_price = sum(product.price for product in self.products.all())
         self.save()
+
+class Message(models.Model):
+    id = models.AutoField(primary_key=True)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages_sent')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages_received')
+    text = models.TextField()
+
+    def __str__(self):
+        return f"Message from {self.sender.name} to {self.receiver.name}"
