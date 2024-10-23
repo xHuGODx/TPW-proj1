@@ -11,6 +11,9 @@ class User(models.Model):
     image = models.FileField(upload_to='profile_images/', null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     sold = models.IntegerField(default=0)
+    cart = models.ManyToManyField('Product', related_name='carts', blank=True)
+    favorites = models.ManyToManyField('Product', related_name='favorited_users', blank=True)
+    followers = models.ManyToManyField('self', symmetrical=False, related_name='following', blank=True)
 
     def __str__(self):
         return self.name
@@ -41,7 +44,7 @@ class Product(models.Model):
     def get_image(self):
         """Return the sold version of the image if the product is sold."""
         if self.sold and self.image:
-            #implementar funcao que cria a imagem nova.
+            # Implement function to create the new image
             return self.image.url.replace(".png", "_sold.png")
         return self.image.url if self.image else None
 
@@ -56,35 +59,18 @@ class Comment(models.Model):
     def __str__(self):
         return f"Comment by {self.user.name} on {self.seller.name}"
 
-# Follower Model to track user followers
-class Follower(models.Model):
+# Order Model to track orders between buyers and sellers
+class Order(models.Model):
     id = models.AutoField(primary_key=True)
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
-    followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
-
-    def __str__(self):
-        return f"{self.follower.name} follows {self.followed.name}"
-
-# Favorite Model to track user favorite products
-class Favorite(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorited_by')
-
-    def __str__(self):
-        return f"{self.user.name} likes {self.product.name}"
-
-# Cart Model to manage user's cart and total price
-class Cart(models.Model):
-    id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart')
-    products = models.ManyToManyField(Product)  # Use Product directly
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders_made')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders_received')
+    products = models.ManyToManyField(Product)
     total_price = models.FloatField(default=0.00)
 
     def __str__(self):
-        return f"Cart {self.id} for {self.user.name} with total price: {self.total_price}"
+        return f"Order {self.id} from {self.buyer.name} to {self.seller.name}"
 
     def calculate_total_price(self):
-        """Calculate the total price of products in the cart."""
+        """Calculate the total price of products in the order."""
         self.total_price = sum(product.price for product in self.products.all())
         self.save()
