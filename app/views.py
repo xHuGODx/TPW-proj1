@@ -69,4 +69,10 @@ def index(request):
         'min_price': min_price,
         'max_price': max_price,
     }
-    return render(request, 'index.html', context)
+    try:
+        user = User.objects.get(username=request.user.username)
+        context['user'] = user
+        return render(request, 'index.html', context)
+    except User.DoesNotExist:    
+        context['user'] = None  
+        return render(request, 'index.html', context)

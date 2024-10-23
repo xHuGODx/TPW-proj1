@@ -18,12 +18,14 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from app import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', views.index, name='index'),
     path('profile/', views.profile, name='profile'),
+    path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
 
     # remover
     path('contact/', views.contact, name='contact'),

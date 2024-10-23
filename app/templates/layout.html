@@ -34,46 +34,58 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'index' %}">Following</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'about' %}">My Products</a>
-          </li>
+          {% if user %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'index' %}">Following</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'about' %}">My Products</a>
+            </li>
+          {% endif %}
         </ul>
 
         <ul class="navbar-nav d-flex flex-row ms-auto me-3" style="margin-right: 5px;">
-          <li class="nav-item">
-            <a class="nav-link" href="/">{% bs_icon 'chat-fill' %}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/">{% bs_icon 'cart-fill' %}</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/">{% bs_icon 'heart-fill' %}</a>
-          </li>
+          {% if user %}
+            <li class="nav-item">
+              <a class="nav-link" href="/">{% bs_icon 'chat-fill' %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/">{% bs_icon 'cart-fill' %}</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/">{% bs_icon 'heart-fill' %}</a>
+            </li>
+          
 
-          <li class="nav-item me-3 me-lg-0 dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
-              aria-expanded="false" data-bs-toggle='dropdown' href="/">
-                {% bs_icon 'person-fill' %}
-            </a>
-            
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
-              <li>
-                <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
-              </li>
-              {% if user.admin %}
+            <li class="nav-item me-3 me-lg-0 dropdown">
+              <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
+                aria-expanded="false" data-bs-toggle='dropdown' href="/">
+                  {% bs_icon 'person-fill' %}
+              </a>
+              
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
                 <li>
-                  <a class="dropdown-item" href="/">Admin Page</a>
+                  <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
                 </li>
-              {% endif %}
-              <li>
-                <hr class="dropdown-divider" />
-                <a class="dropdown-item" style="color: red;" href="/">Logout</a>
-              </li>
-            </ul>
-          </li>        
+                {% if user.admin %}
+                  <li>
+                    <a class="dropdown-item" href="/">Admin Page</a>
+                  </li>
+                {% endif %}
+                <li>
+                  <hr class="dropdown-divider" />
+                  <a class="dropdown-item" style="color: red;" href="/">Logout</a>
+                </li>
+              </ul>
+            </li>       
+          {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/">Register</a>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </nav>
