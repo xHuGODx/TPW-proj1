@@ -7,6 +7,11 @@ django.setup()
 from app.models import User, Product, Comment, Order, Message
 from django.contrib.auth import authenticate, login as auth_login
 
+User.objects.all().delete()
+Product.objects.all().delete()
+Comment.objects.all().delete()
+Order.objects.all().delete()
+Message.objects.all().delete()
 
 user1 = User.objects.create(
     id=1,

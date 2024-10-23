@@ -3,31 +3,72 @@
 {% block content %}
 
 <div class="jumbotron">
-    <h1>Django</h1>
-    <p class="lead">Django is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://www.djangoproject.com/" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+    <h1>Products</h1>
+    <p class="lead">Discover a variety of Star Wars items available for purchase.</p>
+</div>
+
+<div class="search-container">
+    <form method="get" action="{% url 'index' %}">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ search_query }}">
+            </div>
+            <div class="form-group col-md-3">
+                <select name="category" class="form-control">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <input type="number" name="min_price" class="form-control" placeholder="Min Price" value="{{ min_price }}">
+                <input type="number" name="max_price" class="form-control" placeholder="Max Price" value="{{ max_price }}">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">🔍 Search</button>
+    </form>
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            Django gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://www.djangobook.com">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>The Python Package Index is a repository of software for the Python programming language.</p>
-        <p><a class="btn btn-default" href="https://pypi.python.org/pypi">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>pythonanywhere</h2>
-        <p>Host, run, and code Python in the cloud!</p>
-        <p><a class="btn btn-default" href="https://www.pythonanywhere.com/">Learn more &raquo;</a></p>
-    </div>
+    {% for product in products %}
+        <div class="col-md-4">
+            <div class="product-card">
+                <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid">
+                <div class="info">
+                    <h2>{{ product.name }}</h2>
+                    <p>Price: ${{ product.price }}</p>
+                    <p>Seller: {{ product.user.name }}</p>
+                    <button class="btn btn-info" onclick="window.location.href=''">Open</button>
+                    <button>❤️ Add to Favorites</button>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>
+
+<script>
+    function addToFavorites(productId) {
+        alert("Added product " + productId + " to favorites!");
+    }
+</script>
+
+<style>
+    .product-card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .product-card img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 10px;
+    }
+</style>
 
 {% endblock %}
