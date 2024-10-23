@@ -3,7 +3,9 @@
 <div class="container">
   <div class="row d-flex">
     <div class="col-md-4">
-        <img src="{{ user.image }}" alt="Profile Picture" style="width: 100%; border-radius: 50%;">
+        <img src="{% if user.image %}/media/{{ user.image.name }}{% else %}{% static 'images/sold.png' %}{% endif %}" 
+            alt="Profile Picture" style="width: 100%; border-radius: 50%;"
+            class="rounded-circle">
     </div>
     <div class="col-md-8">
       <h2>{{ user.name }}</h2>
@@ -11,5 +13,5 @@
       <h2>Email: {{ user.email }}</h2>
       <h2>{{ user.description }}</h2>
     </div>
-  </div>
+   </div>
 </div>
