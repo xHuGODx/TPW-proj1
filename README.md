@@ -4,7 +4,7 @@
 
 | Nome | NMec |
 |:---|:---:|
-| Inês | xxxxxx |
+| Inês Ferreira | 104415 |
 | Hugo Ribeiro | 113402 |
 | Eduardo Lopes | 103070 |
 
