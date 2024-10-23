@@ -1,5 +1,5 @@
-app/__pycache__
-db.sqlite3
-app/migrations/__pycache__
-webproj/__pycache__
-venv/
+*app/__pycache__
+*webproj/__pycache__
+*db.sqlite3
+*app/migrations/__pycache__
+*venv/
