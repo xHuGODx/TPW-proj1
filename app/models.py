@@ -26,6 +26,15 @@ class User(models.Model):
 
 # Product Model
 class Product(models.Model):
+    CATEGORY_CHOICES = [
+        ('WEAPON', 'Weapon'),
+        ('LEGO', 'Lego'),
+        ('FIGURES', 'Figures'),
+        ('POSTER', 'Poster'),
+        ('COLLECTIBLE', 'Collectible'),
+        ('OTHER', 'Other'),
+    ]
+
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=70)
     description = models.TextField(null=True, blank=True)
@@ -34,7 +43,7 @@ class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='products')
     seen = models.IntegerField(default=0)
     brand = models.CharField(max_length=70, null=True, blank=True)
-    category = models.CharField(max_length=70, null=True, blank=True)
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='OTHER')
     color = models.CharField(max_length=70, null=True, blank=True)
     sold = models.BooleanField(default=False)
 
