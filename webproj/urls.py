@@ -23,6 +23,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', views.index, name='index'),
+    path('profile/', views.profile, name='profile'),
+
+    # remover
     path('contact/', views.contact, name='contact'),
     path('about/', views.about, name='about'),
 
