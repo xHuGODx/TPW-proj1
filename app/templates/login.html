@@ -2,28 +2,32 @@
 
 {% block content %}
 
-<h2>{{ title }}</h2>
-<div class="row">
-    <div class="col-md-8">
+<h2 style="padding-top: 60px; text-align: center;">{{ title }}</h2>
+<div class="row justify-content-center">
+    <div class="container d-flex justify-content-center align-items-center">
         <section id="loginForm">
             <form action="." method="post" class="form-horizontal">
                 {% csrf_token %}
-                <h4>Use a local account to log in.</h4>
+                <h4>Use a local account to log in</h4>
                 <hr />
                 <div class="form-group">
-                    {{ form.username.label_tag }}
-                    <div class="col-md-10">
+                    <div class="text-center">
+                        {{ form.username.label_tag }}
+                    </div>       
+                    <div class="text-center">
                         {{ form.username }}
                     </div>
                 </div>
-                <div class="form-group">
-                    {{ form.password.label_tag }}
-                    <div class="col-md-10">
+                <div class="form-group mb-3">
+                    <div class="text-center mt-4">
+                        {{ form.password.label_tag }}
+                    </div>
+                    <div class="text-center">
                         {{ form.password }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
+                    <div class="col-md-10 mx-auto">
                         <input type="hidden" name="next" value="/" />
                         <input type="submit" value="Log in" class="btn btn-default" />
                     </div>
@@ -34,9 +38,61 @@
             </form>
         </section>
     </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm"></section>
-    </div>
 </div>
+
+<style>
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 160px); 
+    }
+
+    #loginForm {
+        max-width: 500px;
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #loginForm h4 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #343a40;
+        font-weight: bold;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .form-group .col-md-10 {
+        margin-bottom: 15px;
+    }
+
+    #loginForm .btn-default {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 4px;
+        border: none;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+    #loginForm .btn-default:hover {
+        background-color: #0056b3;
+    }
+
+    .validation-summary-errors {
+        color: #d9534f;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 15px;
+    }
+</style>
 
 {% endblock %}
