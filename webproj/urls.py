@@ -25,7 +25,7 @@ urlpatterns = [
 
     path('', views.index, name='index'),
     path('profile/', views.profile, name='profile'),
-    path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'), 
 
     # remover
     path('contact/', views.contact, name='contact'),

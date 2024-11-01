@@ -1,6 +1,12 @@
 {% extends "layout.html" %}
 
+{% load static %}
+
 {% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
 
 <div class="jumbotron text-align text-center" style="padding-top: 60px;">
     <h1>Products</h1>
@@ -40,65 +46,20 @@
                     <p>Price: ${{ product.price }}</p>
                     <p>Seller: {{ product.user.name }}</p>
                     <button class="btn btn-info" onclick="window.location.href=''">Open</button>
-                    <button>❤️ Add to Favorites</button>
+                    <form method="post" action="{% url 'index' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        {% if user and product.id in favorite_products %}
+                            <button type="submit" class="btn btn-danger">❤️ Remove from Favorites</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-primary">❤️ Add to Favorites</button>
+                        {% endif %}
+                    </form>
+                    
                 </div>
             </div>
         </div>
     {% endfor %}
 </div>
-
-<script>
-    function addToFavorites(productId) {
-        alert("Added product " + productId + " to favorites!");
-    }
-</script>
-
-<style>
-    .product-card {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        margin: 10px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        height: 550px;
-    }
-
-    .product-card img {
-        width: 100%;
-        width: 300px; 
-        height: 300px;
-        object-fit: cover; 
-        margin-bottom: 20px;
-    }
-
-    .search-container {
-    display: flex;
-    justify-content: center; /* Centers the form */
-    padding: 10px;
-    }
-
-    .search-container .form-inline {
-        display: flex;
-        gap: 10px; /* Adds spacing between form elements */
-        flex-wrap: wrap; /* Allows wrapping on smaller screens */
-        width: 100%;
-        max-width: 1000px; /* Set a max-width if desired */
-    }
-
-    .search-container .form-group,
-    .search-container button {
-        flex: 1; /* Adjusts each element to take equal width */
-        min-width: 120px; /* Sets a minimum width for responsiveness */
-    }
-
-    .search-container input,
-    .search-container select,
-    .search-container button {
-        width: 100%; /* Ensures all elements span their container */
-    }
-</style>
 
 {% endblock %}
