@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from app.models import *
@@ -125,3 +125,10 @@ def favourites(request):
     }
 
     return render(request, 'favourites.html', context)
+@login_required
+def profile(request):
+    username = request.user.username
+    print(f"Logged in username: {username}")  # Debug print
+    user = get_object_or_404(User, username=username)
+    print(f"User object retrieved: {user}")  # Debug print
+    return render(request, 'profile.html', {'user': user})
