@@ -40,7 +40,6 @@ def profile(request):
         return render(request, 'profile.html', {'user': user, 'followers': followers, 'following': following})
     
 
-@login_required
 def index(request):
     # Handle the search, category, and price filters
     query = request.GET.get('search', '')
@@ -64,10 +63,6 @@ def index(request):
     # Get unique categories for the filter
     categories = Product.objects.values_list('category', flat=True).distinct()
 
-    # Get the user and their favorites
-    user = request.user
-    user_favorites = Favourite.objects.filter(user=user).values_list('product_id', flat=True)
-
     # Initialize the context
     context = {
         'products': products,
@@ -76,29 +71,38 @@ def index(request):
         'selected_category': category,
         'min_price': min_price,
         'max_price': max_price,
-        'user': user,
-        'favorite_products': list(user_favorites),  # Pass favorite product IDs to context
+        'user': request.user,  # Always include the user object
     }
 
-    # Handle adding/removing favorites
-    if request.method == 'POST':
-        product_id = request.POST.get('product_id')
-        product = Product.objects.get(id=product_id)
+    # Check if the user is authenticated
+    if request.user.is_authenticated:
+        # Get the user's favorites if logged in
+        user_favorites = Favourite.objects.filter(user=request.user).values_list('product_id', flat=True)
+        context['favorite_products'] = list(user_favorites)  # Pass favorite product IDs to context
 
-        # Check if the user has already favorited the product
-        favorite, created = Favourite.objects.get_or_create(user=user, product=product)
+        # Handle adding/removing favorites
+        if request.method == 'POST':
+            product_id = request.POST.get('product_id')
+            product = Product.objects.get(id=product_id)
 
-        if created:
-            # If it was created, that means we added it to favorites
-            favorite.save()
-        else:
-            # If it exists, that means we should remove it
-            favorite.delete()
-        
-        # Redirect back to the index page after adding/removing favorites
-        return redirect('index')
+            # Check if the user has already favorited the product
+            favorite, created = Favourite.objects.get_or_create(user=request.user, product=product)
+
+            if created:
+                # If it was created, that means we added it to favorites
+                favorite.save()
+            else:
+                # If it exists, that means we should remove it
+                favorite.delete()
+            
+            # Redirect back to the index page after adding/removing favorites
+            return redirect('index')
+    else:
+        # If the user is not authenticated, set the favorites key as an empty list
+        context['favorite_products'] = []
 
     return render(request, 'index.html', context)
+
 
 
 @login_required
