@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<div class="jumbotron text-align text-center" style="padding-top: 60px;">
+    <h1>Following</h1>
+    <p class="lead">Discover products from users you're following.</p>
+</div>
+
+<div class="row">
+    {% if followed_products %}
+        {% for user, products in followed_products.items %}
+            <div class="col-12 mb-4">
+                <h2>{{ user.name|default:user.username }}</h2>
+                <hr>
+                <div class="row">
+                    {% for product in products %}
+                        <div class="col-md-4">
+                            <div class="product-card">
+                                <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid" style="width: 100%; width: 300px; height: 300px; object-fit: cover; margin-bottom: 20px;">
+                                <div class="info">
+                                    <h2>{{ product.name }}</h2>
+                                    <p>Price: ${{ product.price }}</p>
+                                    <p>Seller: {{ product.user.name }}</p>
+                                    <button class="btn btn-info" onclick="window.location.href='{% url 'product_details' product.id %}'">Open</button>
+                                    <form method="post" action="{% url 'following' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                                        {% if user and product.id in favourite_products %}
+                                            <button type="submit" class="btn btn-danger">❤️ Remove from Favourites</button>
+                                        {% else %}
+                                            <button type="submit" class="btn btn-primary">❤️ Add to Favourites</button>
+                                        {% endif %}
+                                    </form>                                    
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center">You are not following any users with available products.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
