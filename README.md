@@ -1,5 +1,14 @@
 # TPW-proj1
 
+# Notas
+```
+Update ao modelo pela milesima vez.
+Ja ta tudo como devia.
+Se correrem o insertData.py ele vai apagar os superusers atencao.
+Alterei o modelo para haver tabelas para os favoritos e cart e followers nao muda nada na implementacao só foi para ficar mais normalizado
+alterei o insertdata/admin.py/settings para suportar estas mudancas
+```
+
 # Membros do Grupo
 
 | Nome | NMec |

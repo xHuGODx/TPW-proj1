@@ -1,9 +1,10 @@
 from django.contrib import admin
-from .models import User, Product, Comment, Order, Message
+from .models import User, Product, Comment, Favourite, Cart, Message, Follower
 
 admin.site.register(User)
 admin.site.register(Product)
 admin.site.register(Comment)
-admin.site.register(Order)
 admin.site.register(Message)
-
+admin.site.register(Favourite)
+admin.site.register(Cart)
+admin.site.register(Follower)

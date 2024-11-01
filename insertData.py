@@ -4,86 +4,94 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "webproj.settings")
 django.setup()
 
-from app.models import User, Product, Comment, Order, Message
+from app.models import User, Product, Comment, Message, Cart, Favourite, Follower
 from django.contrib.auth import authenticate, login as auth_login
 
 User.objects.all().delete()
 Product.objects.all().delete()
 Comment.objects.all().delete()
-Order.objects.all().delete()
+Cart.objects.all().delete()
 Message.objects.all().delete()
+Favourite.objects.all().delete()
+Follower.objects.all().delete()
 
 user1 = User.objects.create(
     id=1,
     username="joao",
     name="João Carlos Rodrigues",
     email="joao@example.com",
-    password="password1",
     admin=False,
     image="profile_images/joao.jpg",
     description="Sigma Sigma on the wall, whos the skibidiest of them all?",
     sold=0,
 )
+user1.set_password("password1")
+user1.save()
 
 user2 = User.objects.create(
     id=2,
     username="maria",
     name="Maria Ferreira Silva",
     email="maria@example.com",
-    password="password2",
     admin=False,
     image="profile_images/maria.jpg",
     description="Amante de livros e colecionadora de action figures.",
     sold=0,
 )
+user2.set_password("password2")
+user2.save()
 
 user3 = User.objects.create(
     id=3,
     username="ricardo",
     name="Ricardo Nogueira",
     email="ricardo@example.com",
-    password="password3",
     admin=False,
     image="profile_images/ricardo.jpg",
     description="Nerd que gosta de Pilates e de jogar SONIC.",
     sold=0,
 )
+user3.set_password("password3")
+user3.save()
 
 user4 = User.objects.create(
     id=4,
     username="ana",
     name="Ana Paula Mendes",
     email="ana@example.com",
-    password="password4",
     admin=False,
     image="profile_images/ana.jpg",
     description="Administradora dedicada com paixão por Star Wars.",
     sold=2,
 )
+user4.set_password("password4")
+user4.save()
 
 user5 = User.objects.create(
     id=5,
     username="tiago",
     name="Tiago Lopes",
     email="tiago@example.com",
-    password="password5",
     admin=False,
     image="profile_images/tiago.jpg",
     description="Colecionador de figuras raras e fã de cosplay.",
     sold=1,
 )
+user5.set_password("password5")
+user5.save()
 
 useradmin = User.objects.create(
     id=6,
     username="mateus",
     name="Mateus Reis Silva",
     email="mateus@example.com",
-    password="password123",
     admin=True,
     image="profile_images/mateus.jpg",
     description="Desenvolvedor de software e entusiasta de tecnologia.",
     sold=0,
 )
+useradmin.set_password("password123")
+useradmin.save()
 
 
 authenticate(username='joao', password='password1')
@@ -341,19 +349,30 @@ for p in products:
     p.save()
 
 
-user1.favorites.add(products[0], products[4])
-user2.favorites.add(products[1], products[5], products[12])
-user3.favorites.add(products[2], products[13])
-user4.favorites.add(products[3], products[9], products[0])
-user5.favorites.add(products[8], products[11], products[18])
+# Adding products to user favorites
+Favourite.objects.create(user=user1, product=products[0])
+Favourite.objects.create(user=user1, product=products[4])
+Favourite.objects.create(user=user2, product=products[1])
+Favourite.objects.create(user=user2, product=products[5])
+Favourite.objects.create(user=user2, product=products[12])
+Favourite.objects.create(user=user3, product=products[2])
+Favourite.objects.create(user=user3, product=products[13])
+Favourite.objects.create(user=user4, product=products[3])
+Favourite.objects.create(user=user4, product=products[9])
+Favourite.objects.create(user=user4, product=products[0])
+Favourite.objects.create(user=user5, product=products[8])
+Favourite.objects.create(user=user5, product=products[11])
+Favourite.objects.create(user=user5, product=products[18])
 
-user1.followers.add(user2)
-user1.followers.add(user3)
-user2.followers.add(user4)
-user3.followers.add(user1)
-user3.followers.add(user5)
-user4.followers.add(user5)
-user5.followers.add(user2)
+# Adding followers to users
+Follower.objects.create(user=user1, follower=user2)
+Follower.objects.create(user=user1, follower=user3)
+Follower.objects.create(user=user2, follower=user4)
+Follower.objects.create(user=user3, follower=user1)
+Follower.objects.create(user=user3, follower=user5)
+Follower.objects.create(user=user4, follower=user5)
+Follower.objects.create(user=user5, follower=user2)
+
 
 
 user1.save()
