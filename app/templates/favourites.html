@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% load static %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<div class="jumbotron text-align text-center" style="padding-top: 60px;">
+    <h1>Your Favorite Products</h1>
+    <p class="lead">Here are the products you have favorited.</p>
+</div>
+
+<div class="row">
+    {% if products %}
+        {% for product in products %}
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 20px;">
+                    <div class="info">
+                        <h2>{{ product.name }}</h2>
+                        <p>Price: ${{ product.price }}</p>
+                        <p>Seller: {{ product.user.name }}</p>
+                        <form method="post" action="{% url 'favourites' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="btn btn-danger">❤️ Remove from Favourites</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You have no favorite products yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

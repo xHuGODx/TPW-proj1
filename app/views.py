@@ -99,3 +99,25 @@ def index(request):
         return redirect('index')
 
     return render(request, 'index.html', context)
+
+
+@login_required
+def favourites(request):
+    # Get the logged-in user
+    user = request.user
+
+    # Retrieve the favorite products for the user
+    favorite_products_ids = Favourite.objects.filter(user=user).values_list('product_id', flat=True)
+    favorite_products = Product.objects.filter(id__in=favorite_products_ids)
+
+    # Get unique categories for the filter (optional)
+    categories = Product.objects.values_list('category', flat=True).distinct()
+
+    # Prepare the context for rendering the favorites page
+    context = {
+        'products': favorite_products,
+        'categories': categories,
+        'user': user,
+    }
+
+    return render(request, 'favourites.html', context)
