@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from app.models import *
+from app.forms import RegisterForm
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
 
 
 # Create your views here.
@@ -125,3 +128,35 @@ def favourites(request):
     }
 
     return render(request, 'favourites.html', context)
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+
+        if form.is_valid():
+            user = User.objects.filter(username=form.cleaned_data['username'])
+
+            if user:
+                return render(request, 'register.html', {'form': form, 'error': True})
+
+            else:
+                form.save()
+                email = form.cleaned_data.get('email')
+                password = form.cleaned_data.get('password1')
+                username = form.cleaned_data.get('username')
+                name = form.cleaned_data.get('name')
+
+                user = authenticate(username=username, password=password)
+                auth_login(request, user)
+
+                user = User.objects.create(username=username, email=email, name=name, password=password)
+                user.save()
+
+                return redirect('index')
+        
+        else:
+            return render(request, 'register.html', {'form': form, 'error': True})
+    
+    else:
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form, 'error': False})
