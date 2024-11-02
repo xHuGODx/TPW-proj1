@@ -24,7 +24,7 @@
                         <p>Price: ${{ product.price }}</p>
                         <p>Seller: {{ product.user.name }}</p>
                         <button class="btn btn-info" onclick="window.location.href='{% url 'product_details' product.id %}'">View Details</button>
-                        <button class="btn btn-warning" onclick="window.location.href='#'">Edit Details</button> <!-- Dummy button for editing -->
+                        <button class="btn btn-warning" onclick="window.location.href='{% url 'editproduct' product.id %}'">Edit Details</button> <!-- Dummy button for editing -->
                         
                         <!-- Form to remove the product -->
                         <form method="post" action="{% url 'myproducts' %}">

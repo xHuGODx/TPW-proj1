@@ -8,6 +8,7 @@ Se correrem o insertData.py ele vai apagar os superusers atencao.
 Alterei o modelo para haver tabelas para os favoritos e cart e followers nao muda nada na implementacao só foi para ficar mais normalizado
 alterei o insertdata/admin.py/settings para suportar estas mudancas
 ```
+# Notas 2
 ```
 add product
 cart
@@ -17,6 +18,10 @@ myproducts
 remover um produto
 detalhes de um produto
 adicionar ao carrinho
+```
+# Notas 3
+```
+
 ```
 
 # Membros do Grupo
@@ -47,10 +52,10 @@ adicionar ao carrinho
 - Add ads ✅
 - See their own ads ✅
 - Remove their ads ✅
-- Edit their ads
+- Edit their ads ✅
 - Add ads to cart and buy ✅ (so metade)
 - Follow
-- See products from users they follow
+- See products from users they follow ✅
 - See who follows them
 - Add ads to favourites ✅
 - See their favourites ✅

@@ -32,6 +32,7 @@ urlpatterns = [
     path('following/', views.following, name='following'),
     path('myproducts/', views.myproducts, name='myproducts'),
     path('addproduct/', views.addproduct, name='addproduct'),
+    path('editproduct/<int:product_id>/', views.edit_product, name='editproduct'),
 
     # remover
     path('contact/', views.contact, name='contact'),

@@ -257,3 +257,24 @@ def addproduct(request):
 
     categories = Product.CATEGORY_CHOICES  # Get category choices for the form
     return render(request, 'addproduct.html', {'categories': categories})
+
+@login_required
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id, user=request.user)
+
+    if request.method == 'POST':
+        product.name = request.POST.get('name')
+        product.description = request.POST.get('description')
+        product.price = request.POST.get('price')
+        product.brand = request.POST.get('brand')
+        product.category = request.POST.get('category')
+        product.color = request.POST.get('color')
+
+        if 'image' in request.FILES:
+            product.image = request.FILES['image']  # Update the image if a new one is uploaded
+
+        product.save()
+        return redirect('myproducts')  # Redirect to "My Products" after saving
+
+    categories = Product.CATEGORY_CHOICES  # For category choices in the form
+    return render(request, 'editproduct.html', {'product': product, 'categories': categories})
