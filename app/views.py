@@ -2,6 +2,9 @@ from django.shortcuts import get_object_or_404, render, redirect
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from app.models import *
+from app.forms import RegisterForm
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
 
 
 # Create your views here.
@@ -133,6 +136,35 @@ def favourites(request):
     }
 
     return render(request, 'favourites.html', context)
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+
+        if form.is_valid():
+            if User.objects.filter(username=form.cleaned_data['username']).exists():
+                return render(request, 'register.html', {'form': form, 'error': 'Username already taken'})
+
+            form.save()
+            
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                auth_login(request, user)
+
+            return redirect('index')
+
+        else:
+
+            return render(request, 'register.html', {'form': form, 'error': 'Invalid form input'})
+
+    else:
+
+        form = RegisterForm()
+        return render(request, 'register.html', {'form': form, 'error': False})
 
 
 @login_required
@@ -287,3 +319,4 @@ def profile(request):
     user = get_object_or_404(User, username=username)
     print(f"User object retrieved: {user}")  # Debug print
     return render(request, 'profile.html', {'user': user})
+
