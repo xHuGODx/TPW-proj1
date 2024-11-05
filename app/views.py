@@ -134,29 +134,25 @@ def register(request):
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-            user = User.objects.filter(username=form.cleaned_data['username'])
+            if User.objects.filter(username=form.cleaned_data['username']).exists():
+                return render(request, 'register.html', {'form': form, 'error': 'Username already taken'})
 
-            if user:
-                return render(request, 'register.html', {'form': form, 'error': True})
-
-            else:
-                form.save()
-                email = form.cleaned_data.get('email')
-                password = form.cleaned_data.get('password1')
-                username = form.cleaned_data.get('username')
-                name = form.cleaned_data.get('name')
-
-                user = authenticate(username=username, password=password)
+            form.save()
+            
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            
+            user = authenticate(username=username, password=password)
+            if user is not None:
                 auth_login(request, user)
 
-                user = User.objects.create(username=username, email=email, name=name, password=password)
-                user.save()
+            return redirect('index')
 
-                return redirect('index')
-        
         else:
-            return render(request, 'register.html', {'form': form, 'error': True})
-    
+
+            return render(request, 'register.html', {'form': form, 'error': 'Invalid form input'})
+
     else:
+
         form = RegisterForm()
         return render(request, 'register.html', {'form': form, 'error': False})
