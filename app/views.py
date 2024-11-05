@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from app.models import *
+from django.db.models import Q
+from django.contrib import messages
 from app.forms import RegisterForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
@@ -178,11 +180,23 @@ def product_details(request, product_id):
     is_in_cart = Cart.objects.filter(user=request.user, product=product).exists()
 
     if request.method == "POST":
-        # Handle "Add to Cart" request
-        cart_item, created = Cart.objects.get_or_create(user=request.user, product=product)
-        
-        # Redirect back to the product details page
-        return redirect('product_details', product_id=product_id)
+        if "product_id" in request.POST:  # Handling "Add to Cart" form
+            # Handle "Add to Cart" request
+            Cart.objects.get_or_create(user=request.user, product=product)
+            # Redirect back to the product details page
+            return redirect('product_details', product_id=product_id)
+
+        elif "message" in request.POST:  # Handling message form submission
+            # Get the message text and format it
+            message_text = request.POST.get("message")
+            formatted_text = f"{request.user.username} is messaging you about {product.name}: {message_text}"
+
+            # Create the message with the formatted text
+            Message.objects.create(
+                sender=request.user,
+                receiver=product.user,  # Assuming the seller is the product's user
+                text=formatted_text
+            )
 
     context = {
         "product": product,
@@ -320,3 +334,36 @@ def profile(request):
     print(f"User object retrieved: {user}")  # Debug print
     return render(request, 'profile.html', {'user': user})
 
+@login_required
+def messages_page(request, user_id=None):
+    # Get all unique users the logged-in user has communicated with
+    contacts = User.objects.filter(
+        Q(messages_sent__receiver=request.user) | Q(messages_received__sender=request.user)
+    ).distinct()
+
+    # Select user to display messages; default to the first user if none is specified
+    selected_user = get_object_or_404(User, id=user_id) if user_id else (contacts.first() if contacts.exists() else None)
+
+    # Get messages for the selected user
+    messages = Message.objects.filter(
+        Q(sender=request.user, receiver=selected_user) | Q(sender=selected_user, receiver=request.user)
+    ).order_by('created_at') if selected_user else []
+
+    if request.method == "POST":
+        # Handle sending a message
+        message_text = request.POST.get("message")
+        if selected_user and message_text:
+            Message.objects.create(
+                sender=request.user,
+                receiver=selected_user,
+                text=message_text
+            )
+            # Redirect to the same page to see the new message
+            return redirect('messages_page', user_id=selected_user.id)
+
+    context = {
+        'contacts': contacts,
+        'selected_user': selected_user,
+        'messages': messages,
+    }
+    return render(request, 'messages_page.html', context)

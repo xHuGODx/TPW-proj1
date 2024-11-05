@@ -52,6 +52,7 @@ adicionar ao carrinho
 - Add ads ✅
 - See their own ads ✅
 - Remove their ads ✅
+- Track views on their add ✅
 - Edit their ads ✅
 - Add ads to cart and buy ✅ (so metade)
 - Follow

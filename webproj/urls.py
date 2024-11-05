@@ -44,6 +44,9 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
+    path('messages/', views.messages_page, name='messages_page'),
+    path('messages/<int:user_id>/', views.messages_page, name='messages_page'),
+
 ]
 
 
