@@ -67,7 +67,7 @@
                 <li>
                   <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
                 </li>
-                {% if user.admin %}
+                {% if user.is_superuser %} <!-- Nao é isto que queremos, temporario -->
                   <li>
                     <a class="dropdown-item" href="/">Admin Page</a>
                   </li>
