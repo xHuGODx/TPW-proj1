@@ -9,6 +9,11 @@ class User(AbstractUser):
     sold = models.IntegerField(default=0)
     admin = models.BooleanField(default=False)
 
+    def get_image(self):
+        if self.image:
+            return self.image.url
+        return '/media/profile_images/default_profile.png'
+
     def __str__(self):
         return self.username
 
