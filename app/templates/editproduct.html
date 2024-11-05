@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Edit Product</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Product Name</label>
+            <input type="text" name="name" class="form-control" value="{{ product.name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea name="description" class="form-control">{{ product.description }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" name="price" class="form-control" step="0.01" value="{{ product.price }}" required>
+        </div>
+        <div class="form-group">
+            <label for="brand">Brand</label>
+            <input type="text" name="brand" class="form-control" value="{{ product.brand }}">
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <select name="category" class="form-control" required>
+                {% for choice in categories %}
+                    <option value="{{ choice.0 }}" {% if choice.0 == product.category %}selected{% endif %}>{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="color">Color</label>
+            <input type="text" name="color" class="form-control" value="{{ product.color }}">
+        </div>
+        <div class="form-group">
+            <label for="image">Product Image</label>
+            <input type="file" name="image" class="form-control">
+            {% if product.image %}
+                <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-thumbnail mt-2" style="width: 150px; height: auto;">
+            {% endif %}
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Update</button>
+            <a href="{% url 'myproducts' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

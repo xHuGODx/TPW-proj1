@@ -75,13 +75,12 @@ class Follower(models.Model):
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='in_carts')
-    quantity = models.PositiveIntegerField(default=1)
 
     class Meta:
         unique_together = ('user', 'product')
 
     def __str__(self):
-        return f"{self.user.username}'s cart - {self.product.name} x {self.quantity}"
+        return f"{self.user.username}'s cart - {self.product.name}"
 
 # Comment Model for user profiles
 class Comment(models.Model):

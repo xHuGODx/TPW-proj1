@@ -36,10 +36,10 @@
         <ul class="navbar-nav mr-auto">
           {% if user.is_authenticated %}
             <li class="nav-item active">
-              <a class="nav-link" href="{% url 'index' %}">Following</a>
+              <a class="nav-link" href="{% url 'following' %}">Following</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'about' %}">My Products</a>
+              <a class="nav-link" href="{% url 'myproducts' %}">My Products</a>
             </li>
           {% endif %}
         </ul>
@@ -50,7 +50,7 @@
               <a class="nav-link" href="/">{% bs_icon 'chat-fill' %}</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/">{% bs_icon 'cart-fill' %}</a>
+              <a class="nav-link" href="{% url 'cart' %}">{% bs_icon 'cart-fill' %}</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'favourites' %}">{% bs_icon 'heart-fill' %}</a>

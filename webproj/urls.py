@@ -27,7 +27,17 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
     path('favourites/', views.favourites, name='favourites'),
+
     path('register/', views.register, name='register'),
+
+    path('product/<int:product_id>/', views.product_details, name='product_details'),
+    path('cart/', views.cart, name='cart'),
+    path('following/', views.following, name='following'),
+    path('myproducts/', views.myproducts, name='myproducts'),
+    path('addproduct/', views.addproduct, name='addproduct'),
+    path('editproduct/<int:product_id>/', views.edit_product, name='editproduct'),
+    path('profile/', views.profile, name='profile'),
+
 
     # remover
     path('contact/', views.contact, name='contact'),
