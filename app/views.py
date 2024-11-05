@@ -278,3 +278,12 @@ def edit_product(request, product_id):
 
     categories = Product.CATEGORY_CHOICES  # For category choices in the form
     return render(request, 'editproduct.html', {'product': product, 'categories': categories})
+
+
+@login_required
+def profile(request):
+    username = request.user.username
+    print(f"Logged in username: {username}")  # Debug print
+    user = get_object_or_404(User, username=username)
+    print(f"User object retrieved: {user}")  # Debug print
+    return render(request, 'profile.html', {'user': user})
