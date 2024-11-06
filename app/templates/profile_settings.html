@@ -1,0 +1,135 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles/profile_settings.css' %}">
+{% endblock %}
+
+{% block title %}
+    Account Settings
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 mx-auto">
+            <h2 class="h3 mb-3 text-center">Account Settings</h2>
+
+            <!-- Profile Summary and Image Update -->
+            <div class="text-center mb-3">
+                <img src="{{ user.get_image }}" alt="Profile Picture" class="rounded-circle profile-img"   
+                        style="width: 120px; height: 120px; object-fit: cover;">
+            </div>
+            <h4 class="text-center">{{ user.name }}</h4>
+            <p class="text-center text-muted">@{{ user.username }}</p>
+            <p class="text-center">{% if user.description %}{{ user.description }}{% else %}No description yet{% endif %}</p>
+            
+            <!-- Profile Picture Form -->
+            <form method="post" enctype="multipart/form-data" class="d-flex align-items-center justify-content-center mt-1">
+                {% csrf_token %}
+                <div class="form-group me-2">
+                    {{ picture_form.image }}
+                </div>
+                <button type="submit" class="btn btn-primary">Update Profile Picture</button>
+            </form>
+            <hr class="my-3" />
+            <form method="post" action="." style="display: inline;">
+                {% csrf_token %}
+                <div class="form-row">
+                    <label class="form-row">Name</label>
+                    <div class="col-12" style="width: 100%;">
+                        {{ profile_form.name }}
+                    </div>
+                </div>
+                <div>
+                    <label class="form-row mt-1">Email</label>
+                    <div class="col-12" style="width: 100%;">
+                        {{ profile_form.email }}
+                    </div>
+                </div>
+                <div>
+                    <label class="form-row mt-1">Username</label>
+                    <div class="col-12" style="width: 100%;">
+                        {{ profile_form.username }}
+                    </div>
+                </div>
+                <div>
+                    <label class="form-row mt-1">Description</label>
+                    <div class="col-12" style="width: 100%;">
+                        {{ profile_form.description }}
+                    </div>
+                </div>
+                {% if success %}
+                    <div class="alert alert-success mt-3 text-center">{{ success }}</div>
+                {% endif %}
+                {% if error %}
+                    <div class="alert alert-danger mt-3 text-center">{{ error }}</div>
+                {% endif %}
+                <div class="text-center mt-2">
+                    <input type="submit" name="profile_change" class="btn btn-primary me-2" value="Save Change" />
+                </div>
+            </form>
+            <hr class="my-2" />
+            <div class="text-center mt-2">     
+                <button type="button" class="btn btn-secondary me-2" data-bs-toggle="modal" data-bs-target="#passwordModal">Change Password</button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account</button>
+            </div>
+            
+            <!-- Password Modal -->
+            <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="passwordModalLabel">Change Password</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="post" action=".">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Current Password</label>
+                                    {{ password_form.old_password }}
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">New Password</label>
+                                    {{ password_form.new_password }}
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Confirm New Password</label>
+                                    {{ password_form.confirm_password }}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <input type="submit" name="password_change" class="btn btn-success" value="Save Password"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Delete Account</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form method="post" action=".">
+                            {% csrf_token %}
+                            <div class="modal-body">
+                                <p>Are you sure you want to permanently delete your account?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <input type="submit" name="delete_account" class="btn btn-danger" value="Delete Account"/>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

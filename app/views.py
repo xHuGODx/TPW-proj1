@@ -5,9 +5,10 @@ from django.urls import reverse
 from app.models import *
 from django.db.models import Q
 from django.contrib import messages
-from app.forms import RegisterForm
+from app.forms import *
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
+from django.contrib.auth.hashers import check_password
 
 
 # Create your views here.
@@ -508,4 +509,100 @@ def checkout(request):
         'cart_items': user_cart,
         'total_value': total_value,
     }
-    return render(request, 'checkout.html', context)
+    return render(request, 'checkout.html', context)@login_required
+def profile_settings(request):
+    if request.method == 'GET':
+        user = User.objects.get(username=request.user.username)
+        picture_form = UpdateUserImageForm()
+        password_form = UpdatePasswordForm()
+        profile_form = UpdateUserProfileForm(initial={
+            'name': user.name,
+            'email': user.email,
+            'username': user.username,
+            'description': user.description
+        })
+
+        return render(request, 'profile_settings.html', {'user': user, 'picture_form': picture_form, 'password_form': password_form, 'profile_form': profile_form})
+    
+    elif request.method == 'POST' and 'image' in request.FILES:
+        user = User.objects.get(username=request.user.username)
+        image_form = UpdateUserImageForm(request.POST, request.FILES)
+
+        if image_form.is_valid():
+            file = request.FILES['image']
+
+            if file:
+                user.update_image(file)
+                return redirect('profile_settings')
+            
+        else:
+            image_form = UpdateUserImageForm()
+            return render(request, 'profile_settings.html', {'user': user, 'picture_form': image_form})
+        
+    elif request.method == 'POST' and 'password_change' in request.POST:
+        user = User.objects.get(username=request.user.username)
+        password_form = UpdatePasswordForm(request.POST)
+        image_form = UpdateUserImageForm()
+        profile_form = UpdateUserProfileForm(initial={
+            'name': user.name,
+            'email': user.email,
+            'username': user.username,
+            'description': user.description
+        })
+
+        if password_form.is_valid():
+            print(password_form.cleaned_data['old_password'])
+            print(user.password)
+            if check_password(password_form.cleaned_data['old_password'], user.password):
+                if password_form.cleaned_data['new_password'] == password_form.cleaned_data['confirm_password']:
+
+                    user.set_password(password_form.cleaned_data['new_password'])
+                    request.user.password = password_form.cleaned_data['new_password']
+                    user.save()
+                    return render(request, 'profile_settings.html', {'user': user, 'password_form': password_form,
+                                                                        'image_form': image_form,
+                                                                        'profile_form': profile_form,
+                                                                        'success': 'Password changed successfully!'})
+                
+                else:
+                    return render(request, 'profile_settings.html', {'user': user, 'password_form': password_form,
+                                                                    'image_form': image_form,
+                                                                    'profile_form': profile_form,
+                                                                    'error': 'Passwords do not match!'})
+                
+            else:
+                return render(request, 'profile_settings.html', {'user': user, 'password_form': password_form,
+                                                                'image_form': image_form,
+                                                                'profile_form': profile_form,
+                                                                'error': 'Incorrect old password!'})
+        
+        else:
+            return render(request, 'profile_settings.html', {'user': user, 'password_form': password_form,
+                                                             'image_form': image_form,
+                                                             'profile_form': profile_form,
+                                                             'error': 'Invalid form input!'})
+    
+    elif request.method == 'POST' and 'profile_change' in request.POST:
+        user = User.objects.get(username=request.user.username)
+        profile_form = UpdateUserProfileForm(request.POST)
+
+        if profile_form.is_valid():
+            if user.username != profile_form.cleaned_data['username']:
+                user.username = profile_form.cleaned_data['username']
+
+            if user.email != profile_form.cleaned_data['email']:
+                user.email = profile_form.cleaned_data['email']
+
+            if user.name != profile_form.cleaned_data['name']:
+                user.name = profile_form.cleaned_data['name']
+
+            if user.description != profile_form.cleaned_data['description']:
+                user.description = profile_form.cleaned_data['description']
+
+            user.save()
+            return redirect('profile_settings')
+    
+    elif request.method == 'POST' and 'delete_account' in request.POST:
+        user = User.objects.get(username=request.user.username)
+        user.delete()
+        return redirect('index')
