@@ -21,7 +21,13 @@ adicionar ao carrinho
 ```
 # Notas 3
 ```
-
+Falta:
+Meter bonito
+meter mais coisos de messages.success(request, "Order confirmed! Thank you for your purchase.") ou de message error
+editar perfil
+o log do website se calhar nao fazemos
+acho que falta alguma logica tipo um user nao comprar os seus proprios produtos
+fazer aquela cena da taxa de 10%
 ```
 
 # Membros do Grupo
@@ -54,7 +60,7 @@ adicionar ao carrinho
 - Remove their ads ✅
 - Track views on their add ✅
 - Edit their ads ✅
-- Add ads to cart and buy ✅ (so metade)
+- Add ads to cart and buy ✅ 
 - Follow ✅
 - See products from users they follow ✅
 - See who follows them ✅
@@ -62,7 +68,7 @@ adicionar ao carrinho
 - See their favourites ✅
 - Send/Receive messages ✅ 
 - View profiles ✅
-- Change profile info WIP
+- Change profile info 
 - Comment on profiles ✅
 - View his cart ✅
 - Logout ✅
