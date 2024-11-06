@@ -45,7 +45,7 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="message">Message:</label>
-            <textarea id="message" name="message" class="form-control" rows="3" placeholder="Write your message here..." required></textarea>
+            <textarea id="message" name="message" style="min-width: 100%;" class="form-control" rows="3" placeholder="Write your message here..." required></textarea>
         </div>
         <button type="submit" class="btn btn-lg btn-primary mt-3">Send Message</button>
     </form>
