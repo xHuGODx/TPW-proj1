@@ -21,25 +21,40 @@
 <div class="row">
     {% if products %}
         {% for product in products %}
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 20px;">
-                    <div class="info">
-                        <h2>{{ product.name }}</h2>
-                        <p>Price: ${{ product.price }}</p>
-                        <p>Seller: {{ product.user.name }}</p>
-                        <button class="btn btn-info" onclick="window.location.href='{% url 'product_details' product.id %}'">View Details</button>
-                        <button class="btn btn-warning" onclick="window.location.href='{% url 'editproduct' product.id %}'">Edit Details</button> <!-- Dummy button for editing -->
-                        
-                        <!-- Form to remove the product -->
-                        <form method="post" action="{% url 'myproducts' %}" style="display: inline-block;">
-                            {% csrf_token %}
-                            <input type="hidden" name="product_id" value="{{ product.id }}">
-                            <button type="submit" class="btn btn-danger">Remove Product</button>
-                        </form>
-                    </div>
+        <div class="col-md-4">
+            <div class="product-card rounded shadow-sm p-3" style="height: 550px;">
+                <!-- Product Image -->
+                <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid rounded mb-3" style="width: 100%; height: 300px; object-fit: cover;">
+        
+                <!-- Product Info -->
+                <div class="info">
+                    <h3 class="fw-bold">{{ product.name }}</h3>
+                    <p class="text-muted">Price: ${{ product.price }}</p>
+                    <p class="text-muted">Seller: {{ product.user.name }}</p>
+                </div>
+        
+                <!-- Buttons at the bottom -->
+                <div class="d-flex justify-content-between mt-auto pt-3">
+                    <!-- View Details Button -->
+                    <button class="btn btn-info flex-grow-1 mb-1 me-1" onclick="window.location.href='{% url 'product_details' product.id %}'">
+                        View Details
+                    </button>
+        
+                    <!-- Edit Details Button -->
+                    <button class="btn btn-warning flex-grow-1 mb-1 me-1" onclick="window.location.href='{% url 'editproduct' product.id %}'">
+                        Edit Details
+                    </button> 
+        
+                    <!-- Remove Product Form Button -->
+                    <form method="post" action="{% url 'myproducts' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" class="btn btn-danger flex-grow-1">Remove Product</button>
+                    </form>
                 </div>
             </div>
+        </div>
+        
         {% endfor %}
     {% else %}
         <p>You have no products listed yet.</p>
