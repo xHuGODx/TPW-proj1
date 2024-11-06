@@ -107,3 +107,12 @@ class Message(models.Model):
 
     def __str__(self):
         return f"Message from {self.sender.username} to {self.receiver.username}"
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    products = models.ManyToManyField('Product', related_name='orders')
+    date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Order by {self.user.username} on {self.date.strftime('%Y-%m-%d %H:%M:%S')}"

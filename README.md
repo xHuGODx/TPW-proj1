@@ -41,7 +41,7 @@ adicionar ao carrinho
 
 ## User - Not logged
 
-- Register/Login ✅ (so o da direita)
+- Register/Login ✅ (so o da direita) ✅ ja tao os 2
 - View all ads  ✅
 - Search and Filter ✅
 
@@ -55,25 +55,25 @@ adicionar ao carrinho
 - Track views on their add ✅
 - Edit their ads ✅
 - Add ads to cart and buy ✅ (so metade)
-- Follow
+- Follow ✅
 - See products from users they follow ✅
-- See who follows them
+- See who follows them ✅
 - Add ads to favourites ✅
 - See their favourites ✅
-- Send/Receive messages
-- View profiles
-- Change profile info
-- Comment on profiles
-- Remove/edit your own comment 
+- Send/Receive messages ✅ 
+- View profiles ✅
+- Change profile info WIP
+- Comment on profiles ✅
 - View his cart ✅
 - Logout ✅
-- Receive notification upon selling a product 
+- Receive notification upon selling a product ✅
 
 ## Admin
 
 - All from above
-- Remove any users/ads
-- Remove any comment
-- Search users and products
-- View all orders
+- Remove any users ✅
+- Remove any ads ✅
+- Remove any comment✅
+- Search users and products ✅
+- View all orders ✅
 - (view website log)

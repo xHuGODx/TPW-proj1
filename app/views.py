@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from app.models import *
 from django.db.models import Q
 from django.contrib import messages
@@ -35,14 +36,6 @@ def about(request):
         'year': datetime.now().year,
     }
     return render(request, 'about.html', tparams)
-
-def profile(request):
-    if request.method == 'GET':
-        user = User.objects.get(username=request.user.username)
-        followers = user.followers.all()
-        following = user.following.all()
-
-        return render(request, 'profile.html', {'user': user, 'followers': followers, 'following': following})
     
 
 def index(request):
@@ -328,11 +321,9 @@ def edit_product(request, product_id):
 
 @login_required
 def profile(request):
-    username = request.user.username
-    print(f"Logged in username: {username}")  # Debug print
-    user = get_object_or_404(User, username=username)
-    print(f"User object retrieved: {user}")  # Debug print
-    return render(request, 'profile.html', {'user': user})
+    return render(request, 'profile.html', {
+        'user': request.user  # Passes the logged-in user to the template
+    })
 
 @login_required
 def messages_page(request, user_id=None):
@@ -367,3 +358,154 @@ def messages_page(request, user_id=None):
         'messages': messages,
     }
     return render(request, 'messages_page.html', context)
+
+
+@login_required
+def admin_page(request):
+    # Get search queries for each section
+    product_query = request.GET.get('product_search', '')
+    user_query = request.GET.get('user_search', '')
+    comment_query = request.GET.get('comment_search', '')
+    order_query = request.GET.get('order_search', '')  # Add search query for orders
+
+    # Filter Products by name based on search query
+    products = Product.objects.filter(name__icontains=product_query) if product_query else Product.objects.all()
+
+    # Filter Users by name based on search query
+    users = User.objects.filter(name__icontains=user_query) if user_query else User.objects.all()
+
+    # Filter Comments by user name or seller name based on search query
+    comments = Comment.objects.filter(user__name__icontains=comment_query) if comment_query else Comment.objects.all()
+
+    # Filter Orders by user name or product name based on search query
+    orders = Order.objects.filter(user__username__icontains=order_query) if order_query else Order.objects.all()
+
+    # Check if delete actions were triggered
+    if request.method == 'POST':
+        if 'delete_product' in request.POST:
+            product_id = request.POST.get('delete_product')
+            product = get_object_or_404(Product, id=product_id)
+            product.delete()
+            return redirect('admin_page')
+        
+        elif 'delete_user' in request.POST:
+            user_id = request.POST.get('delete_user')
+            user = get_object_or_404(User, id=user_id)
+            user.delete()
+            return redirect('admin_page')
+        
+        elif 'delete_comment' in request.POST:
+            comment_id = request.POST.get('delete_comment')
+            comment = get_object_or_404(Comment, id=comment_id)
+            comment.delete()
+            return redirect('admin_page')
+
+    return render(request, 'admin_page.html', {
+        'products': products,
+        'users': users,
+        'comments': comments,
+        'orders': orders,  # Add orders to the context
+        'product_query': product_query,
+        'user_query': user_query,
+        'comment_query': comment_query,
+        'order_query': order_query,  # Pass the order query
+    })
+
+
+@login_required
+def user_detail(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    products = Product.objects.filter(user=user)
+    comments_received = Comment.objects.filter(seller=user)
+    is_own_profile = request.user == user
+    is_following = Follower.objects.filter(user=user, follower=request.user).exists()
+
+    # Get followers if the user is viewing their own profile
+    if is_own_profile:
+        followers = Follower.objects.filter(user=user)
+        followers = [follower.follower for follower in followers]
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+        
+        # Handle Follow/Unfollow
+        if action == "toggle_follow" and not is_own_profile:
+            if is_following:
+                # Unfollow
+                Follower.objects.filter(user=user, follower=request.user).delete()
+                messages.success(request, f"You have unfollowed {user.username}.")
+            else:
+                # Follow
+                Follower.objects.create(user=user, follower=request.user)
+                messages.success(request, f"You are now following {user.username}.")
+            return redirect('user_detail', user_id=user_id)
+
+        # Handle New Comment Submission
+        elif action == "comment" and not is_own_profile:
+            text = request.POST.get("text")
+            rating = request.POST.get("rating")
+            if text and rating:
+                Comment.objects.create(
+                    text=text,
+                    rating=int(rating),
+                    user=request.user,
+                    seller=user
+                )
+                messages.success(request, "Your comment has been added.")
+                return redirect('user_detail', user_id=user_id)
+
+    return render(request, 'user_detail.html', {
+        'user': user,
+        'comments_received': comments_received,
+        'products': products,
+        'is_own_profile': is_own_profile,
+        'is_following': is_following,
+        'followers': followers if is_own_profile else None,
+    })
+
+@login_required
+def checkout(request):
+    user_cart = request.user.cart.all()
+    total_value = sum(item.product.price for item in user_cart)
+
+    if request.method == "POST":
+        address = request.POST.get("address")
+        payment_method = request.POST.get("payment")
+
+        if not address or not payment_method:
+            messages.error(request, "Please complete the address and payment method.")
+            return redirect('checkout')
+
+        # Create the order and mark products as sold
+        order = Order.objects.create(user=request.user)
+        
+        for cart_item in user_cart:
+            product = cart_item.product
+            product.sold = True  # Mark the product as sold
+            product.save()
+            
+            # Add the product to the order
+            order.products.add(product)
+
+            # Send a message to the seller
+            seller = product.user  # The seller of the product
+            message_text = f"{order.user.username} just bought your {product.name}."
+            
+            # Create the message for the seller
+            Message.objects.create(
+                sender=order.user,    # The buyer
+                receiver=seller,      # The seller
+                text=message_text
+            )
+
+        # Clear the user's cart after ordering
+        user_cart.delete()
+
+        messages.success(request, "Order confirmed! Thank you for your purchase.")
+        return redirect('index')
+
+    context = {
+        'cart_items': user_cart,
+        'total_value': total_value,
+    }
+    return render(request, 'checkout.html', context)

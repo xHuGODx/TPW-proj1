@@ -24,7 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', views.index, name='index'),
-    path('profile/', views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
     path('favourites/', views.favourites, name='favourites'),
 
@@ -36,7 +35,9 @@ urlpatterns = [
     path('myproducts/', views.myproducts, name='myproducts'),
     path('addproduct/', views.addproduct, name='addproduct'),
     path('editproduct/<int:product_id>/', views.edit_product, name='editproduct'),
-    path('profile/', views.profile, name='profile'),
+    path('admin-page/', views.admin_page, name='admin_page'),
+    path('user/<int:user_id>/', views.user_detail, name='user_detail'),
+    path('checkout/', views.checkout, name='checkout'),
 
 
     # remover
