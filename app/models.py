@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -102,6 +103,16 @@ class Message(models.Model):
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages_sent')
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages_received')
     text = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"Message from {self.sender.username} to {self.receiver.username}"
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    products = models.ManyToManyField('Product', related_name='orders')
+    date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"Order by {self.user.username} on {self.date.strftime('%Y-%m-%d %H:%M:%S')}"
