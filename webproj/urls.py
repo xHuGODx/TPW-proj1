@@ -37,6 +37,7 @@ urlpatterns = [
     path('addproduct/', views.addproduct, name='addproduct'),
     path('editproduct/<int:product_id>/', views.edit_product, name='editproduct'),
     path('profile/', views.profile, name='profile'),
+    path('profile_settings/', views.profile_settings, name='profile_settings'),
 
 
     # remover
