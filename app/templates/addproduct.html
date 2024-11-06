@@ -18,23 +18,23 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="name">Product Name</label>
-            <input type="text" name="name" class="form-control" required>
+            <input type="text" name="name" class="form-control mb-1" style="min-width: 100%;" required>
         </div>
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea name="description" class="form-control"></textarea>
+            <textarea name="description" class="form-control mb-1" style="min-width: 100%;"></textarea>
         </div>
         <div class="form-group">
             <label for="price">Price</label>
-            <input type="number" name="price" class="form-control" step="0.01" required>
+            <input type="number" name="price" class="form-control mb-1" step="0.01" style="min-width: 100%;" required>
         </div>
         <div class="form-group">
             <label for="brand">Brand</label>
-            <input type="text" name="brand" class="form-control">
+            <input type="text" name="brand" class="form-control mb-1" style="min-width: 100%;">
         </div>
         <div class="form-group">
             <label for="category">Category</label>
-            <select name="category" class="form-control" required>
+            <select name="category" class="form-control mb-1" style="min-width: 100%;" required>
                 {% for choice in categories %}
                     <option value="{{ choice.0 }}">{{ choice.1 }}</option>
                 {% endfor %}
@@ -42,13 +42,17 @@
         </div>
         <div class="form-group">
             <label for="color">Color</label>
-            <input type="text" name="color" class="form-control">
+            <input type="text" name="color" class="form-control mb-1" style="min-width: 100%;">
         </div>
-        <div class="form-group">
-            <label for="image">Product Image</label>
-            <input type="file" name="image" class="form-control" required>
+        <div class="row">
+            <div class="form-group col-md-8">
+                <label for="image">Product Image</label>
+                <input type="file" name="image" class="form-control" style="min-width: 100%;" required>
+            </div>
+            <div class="col-md-4 text-end">
+                <button type="submit" class="btn btn-primary mt-3">Add Product</button>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Add Product</button>
     </form>
 </div>
 

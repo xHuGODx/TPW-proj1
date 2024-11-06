@@ -27,7 +27,7 @@
                 <p><strong>Brand:</strong> {{ product.brand }}</p>
                 <p><strong>Color:</strong> {{ product.color }}</p>
                 <p><strong>Seen:</strong> <span class="text-muted">{{ product.seen }}</span></p>
-
+                <hr class="my-2">
                 <!-- Add to Cart Button -->
                 <form method="post" action="{% url 'product_details' product.id %}">
                     {% csrf_token %}
@@ -39,7 +39,7 @@
             </div>
         </div>
     </div>
-    <hr class="my-2">
+    <hr class="my-3">
     <h2 class="mt-2">Send a Message to the Seller</h2>
     <form method="post">
         {% csrf_token %}

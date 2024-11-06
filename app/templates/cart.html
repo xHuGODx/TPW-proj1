@@ -13,28 +13,37 @@
 
 <div class="row">
     {% for product in products %}
-        <div class="col-md-4">
-            <div class="product-card">
-                <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid" style="width: 100%; width: 300px; height: 300px; object-fit: cover; margin-bottom: 20px;">
-                <div class="info">
-                    <h2>{{ product.name }}</h2>
-                    <p>Price: ${{ product.price }}</p>
-                    <p>Seller: {{ product.user.name }}</p>
-                    
-                    <form method="post" action="{% url 'cart' %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ product.id }}">
-                        <button type="submit" class="btn btn-danger">🗑️ Remove from Cart</button>
-                    </form>
-                </div>
+    <div class="col-md-4">
+        <div class="product-card rounded shadow-sm p-3" style="height: 550px;">
+            <!-- Product Image -->
+            <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid rounded mb-3" style="width: 100%; height: 300px; object-fit: cover;">
+            
+            <!-- Product Info -->
+            <div class="info">
+                <h3 class="fw-bold">{{ product.name }}</h3>
+                <p class="text-muted">Price: ${{ product.price }}</p>
+                <p class="text-muted">Seller: {{ product.user.name }}</p>
+            </div>
+            
+            <!-- Remove from Cart Button at the Bottom -->
+            <div class="d-flex justify-content-between mt-auto pt-3">
+                <form method="post" action="{% url 'cart' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <button type="submit" class="btn btn-danger w-100">🗑️ Remove from Cart</button>
+                </form>
             </div>
         </div>
+    </div>
     {% endfor %}
 </div>
-
-<div class="total text-center mt-5">
-    <h3>Total Value: ${{ total_value }}</h3>
-    <a href="{% url 'checkout' %}" class="btn btn-primary mt-3">Checkout</a>
+<hr class="my-3" />
+<div class="total d-flex justify-content-between align-items-center mt-1 px-3">
+    <!-- Total Value on the Left -->
+    <h3 class="fw-bold mb-0">Total Value: ${{ total_value }}</h3>
+    
+    <!-- Checkout Button on the Right -->
+    <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg">Checkout</a>
 </div>
 
 {% endblock %}
