@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
-<div class="jumbotron text-align text-center" style="padding-top: 60px;">
+<div class="jumbotron text-align text-center">
     <h1>Following</h1>
     <p class="lead">Discover products from users you're following.</p>
 </div>
@@ -28,7 +28,7 @@
                                     <p>Price: ${{ product.price }}</p>
                                     <p>Seller: {{ product.user.name }}</p>
                                     <button class="btn btn-info" onclick="window.location.href='{% url 'product_details' product.id %}'">Open</button>
-                                    <form method="post" action="{% url 'following' %}">
+                                    <form method="post" action="{% url 'following' %}" style="display: inline-block;">
                                         {% csrf_token %}
                                         <input type="hidden" name="product_id" value="{{ product.id }}">
                                         {% if user and product.id in favourite_products %}

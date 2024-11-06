@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
-<div class="jumbotron text-align text-center" style="padding-top: 60px;">
+<div class="jumbotron text-align text-center"">
     <h1>Products</h1>
     <p class="lead">Discover a variety of Star Wars items available for purchase.</p>
 </div>
@@ -40,7 +40,7 @@
     {% for product in products %}
         {% if not product.sold %}  <!-- Skip if the product is sold -->
             <div class="col-md-4">
-                <div class="product-card" style="height: 580px;">
+                <div class="product-card" style="height: 550px;">
                     <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 20px;">
                     <div class="info">
                         <h2>{{ product.name }}</h2>

@@ -24,8 +24,7 @@ adicionar ao carrinho
 Falta:
 Meter bonito
 meter mais coisos de messages.success(request, "Order confirmed! Thank you for your purchase.") ou de message error
-editar perfil
-o log do website se calhar nao fazemos
+o log do website se calhar nao fazemos (edu: concordo)
 acho que falta alguma logica tipo um user nao comprar os seus proprios produtos
 fazer aquela cena da taxa de 10%
 ```

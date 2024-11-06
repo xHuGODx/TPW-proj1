@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 
-<div class="jumbotron text-align text-center" style="padding-top: 60px;">
+<div class="jumbotron text-align text-center">
     <h1>Add Product</h1>
     <p class="lead">Fill out the form below to add a new product.</p>
 </div>
 
-<div class="container">
+<div class="container col-lg-10">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
@@ -48,7 +48,7 @@
             <label for="image">Product Image</label>
             <input type="file" name="image" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary">Add Product</button>
+        <button type="submit" class="btn btn-primary mt-3">Add Product</button>
     </form>
 </div>
 

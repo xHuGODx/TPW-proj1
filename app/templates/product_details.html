@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% if messages %}
-    <div class="container mt-3">
+    <div class="container mt-2">
         {% for message in messages %}
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ message }}
@@ -11,37 +11,43 @@
     </div>
 {% endif %}
 
-
 {% block content %}
-<div class="container mt-5">
-    <h1>{{ product.name }}</h1>
-    <div class="product-details">
-        <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid" style="max-width: 300px; margin-bottom: 20px;">
-        <p><strong>Description:</strong> {{ product.description }}</p>
-        <p><strong>Price:</strong> ${{ product.price }}</p>
-        <p><strong>Seller:</strong> {{ product.user.name }}</p>
-        <p><strong>Category:</strong> {{ product.get_category_display }}</p>
-        <p><strong>Brand:</strong> {{ product.brand }}</p>
-        <p><strong>Color:</strong> {{ product.color }}</p>
-        <p><strong>Seen:</strong> {{ product.seen }}</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="display-4">{{ product.name }}</h1>
+            <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid rounded" style="max-width: 90%; height: auto; object-fit: cover;">
+        </div>
+        <div class="col-md-6" style="margin-top: 100px;">
+            <div class="product-details">
+                <p><strong>Description:</strong> <span class="text-muted">{{ product.description }}</span></p>
+                <p><strong>Price:</strong> <span class="text-success">${{ product.price }}</span></p>
+                <p><strong>Seller:</strong> {{ product.user.name }}</p>
+                <p><strong>Category:</strong> {{ product.get_category_display }}</p>
+                <p><strong>Brand:</strong> {{ product.brand }}</p>
+                <p><strong>Color:</strong> {{ product.color }}</p>
+                <p><strong>Seen:</strong> <span class="text-muted">{{ product.seen }}</span></p>
 
-        <form method="post" action="{% url 'product_details' product.id %}">
-            {% csrf_token %}
-            <input type="hidden" name="product_id" value="{{ product.id }}">
-            <button type="submit" class="btn btn-primary" {% if is_in_cart %}disabled{% endif %}>
-                {% if is_in_cart %}Already in Cart{% else %}Add to Cart{% endif %}
-            </button>
-        </form>
+                <!-- Add to Cart Button -->
+                <form method="post" action="{% url 'product_details' product.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <button type="submit" class="btn btn-lg btn-primary mt-3" {% if is_in_cart %}disabled{% endif %}>
+                        {% if is_in_cart %}Already in Cart{% else %}Add to Cart{% endif %}
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <h2>Send a Message to the Seller</h2>
+    <hr class="my-2">
+    <h2 class="mt-2">Send a Message to the Seller</h2>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
             <label for="message">Message:</label>
-            <textarea id="message" name="message" class="form-control" rows="3" required></textarea>
+            <textarea id="message" name="message" class="form-control" rows="3" placeholder="Write your message here..." required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Send Message</button>
+        <button type="submit" class="btn btn-lg btn-primary mt-3">Send Message</button>
     </form>
 </div>
 {% endblock %}

@@ -26,9 +26,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
     path('favourites/', views.favourites, name='favourites'),
-
     path('register/', views.register, name='register'),
-
     path('product/<int:product_id>/', views.product_details, name='product_details'),
     path('cart/', views.cart, name='cart'),
     path('following/', views.following, name='following'),
@@ -39,13 +37,7 @@ urlpatterns = [
     path('user/<int:user_id>/', views.user_detail, name='user_detail'),
     path('checkout/', views.checkout, name='checkout'),
     path('profile_settings/', views.profile_settings, name='profile_settings'),
-
-
-    # remover
-    path('contact/', views.contact, name='contact'),
-    path('about/', views.about, name='about'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-
     path('messages/', views.messages_page, name='messages_page'),
     path('messages/<int:user_id>/', views.messages_page, name='messages_page'),
 
