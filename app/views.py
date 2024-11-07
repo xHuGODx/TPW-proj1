@@ -509,7 +509,9 @@ def checkout(request):
         'cart_items': user_cart,
         'total_value': total_value,
     }
-    return render(request, 'checkout.html', context)@login_required
+    return render(request, 'checkout.html', context)
+
+@login_required
 def profile_settings(request):
     if request.method == 'GET':
         user = User.objects.get(username=request.user.username)

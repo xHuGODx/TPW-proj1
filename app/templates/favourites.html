@@ -30,6 +30,9 @@
             
                     <!-- Remove from Favourites Button at the Bottom -->
                     <div class="d-flex justify-content-center mt-auto pt-3">
+                        <button class="btn btn-info flex-grow-1 me-1" onclick="window.location.href='{% url 'product_details' product.id %}'">
+                            Open
+                        </button>
                         <form method="post" action="{% url 'favourites' %}">
                             {% csrf_token %}
                             <input type="hidden" name="product_id" value="{{ product.id }}">

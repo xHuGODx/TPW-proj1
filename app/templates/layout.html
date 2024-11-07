@@ -62,7 +62,7 @@
             <li class="nav-item me-3 me-lg-0 dropdown">
               <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
                 aria-expanded="false" data-bs-toggle='dropdown' href="/">
-                  {% bs_icon 'person-fill' %}
+                <img src="{{ user.get_image }}" alt="{{ user.username }}" class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover;">
               </a>
               
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
@@ -92,7 +92,7 @@
       </div>
     </nav>
 
-    <div class="container" style="min-height: calc(100vh - 135px); margin-top: 120px;">
+    <div class="container" style="min-height: calc(100vh - 220px); margin-top: 120px;">
       <!-- Messages Block -->
       {% if messages %}
           <div class="mt-3">

@@ -63,25 +63,29 @@
 
 <!-- New Comment Form -->
 {% if not is_own_profile %}
+    <hr class="my-3">
     <form method="post" action="" class="mb-5">
         {% csrf_token %}
         <input type="hidden" name="action" value="comment">
-        <div class="mb-3">
-            <label for="commentText" class="form-label">Leave a comment</label>
-            <textarea name="text" id="commentText" class="form-control" rows="3" required></textarea>
+        <div class="row mb-2 ">
+            <div class="col-md-8">
+                <label for="commentText" class="form-label">Leave a comment</label>
+                <textarea name="text" id="commentText" style="min-width: 90%;" class="form-control" rows="4" placeholder="Insert your comment here" required></textarea>
+            </div>
+            <div class="col-md-4">
+                <label for="commentRating" class="form-label">Rating</label>
+                <select name="rating" id="commentRating" class="form-select" style="min-width: 100%;" required>
+                    <option value="1">1 - Poor</option>
+                    <option value="2">2 - Fair</option>
+                    <option value="3">3 - Good</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="5">5 - Excellent</option>
+                </select>
+                <button type="submit" class="btn btn-primary mt-3">Submit Comment</button>
+            </div>          
         </div>
-        <div class="mb-3">
-            <label for="commentRating" class="form-label">Rating</label>
-            <select name="rating" id="commentRating" class="form-select" required>
-                <option value="1">1 - Poor</option>
-                <option value="2">2 - Fair</option>
-                <option value="3">3 - Good</option>
-                <option value="4">4 - Very Good</option>
-                <option value="5">5 - Excellent</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit Comment</button>
     </form>
+    <hr class="my-3">
 {% endif %}
 
 <!-- Products Section by User -->
