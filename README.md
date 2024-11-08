@@ -30,10 +30,10 @@ fazer aquela cena da taxa de 10%
 ```
 # Notas 4
 ```
-meter botao de adicionar aos favoritos na pagina do produto
-quando se ta num produto dar para clicar para ir ao perfil do vendedor
+meter botao de adicionar aos favoritos na pagina do produto (done)
+quando se ta num produto dar para clicar para ir ao perfil do vendedor (done)
 resolver bug da navbar
-logica para nao comprar proprios produtos
+logica para nao comprar proprios produtos (done)
 historico de vendas e compras
 messages.success(request, "Order confirmed! Thank you for your purchase.")
 opcionais:
