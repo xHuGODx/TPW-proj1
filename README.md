@@ -28,6 +28,19 @@ o log do website se calhar nao fazemos (edu: concordo)
 acho que falta alguma logica tipo um user nao comprar os seus proprios produtos
 fazer aquela cena da taxa de 10%
 ```
+# Notas 4
+```
+meter botao de adicionar aos favoritos na pagina do produto
+quando se ta num produto dar para clicar para ir ao perfil do vendedor
+resolver bug da navbar
+logica para nao comprar proprios produtos
+historico de vendas e compras
+messages.success(request, "Order confirmed! Thank you for your purchase.")
+opcionais:
+cena de pdf da compra
+percentagem do scam
+(deve faltar algo)
+```
 
 # Membros do Grupo
 
