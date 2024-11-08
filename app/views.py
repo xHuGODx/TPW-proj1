@@ -346,7 +346,7 @@ def messages_page(request, user_id=None):
     selected_user = get_object_or_404(User, id=user_id) if user_id else (contacts.first() if contacts.exists() else None)
 
     # Get messages for the selected user
-    messages = Message.objects.filter(
+    chat_messages = Message.objects.filter(
         Q(sender=request.user, receiver=selected_user) | Q(sender=selected_user, receiver=request.user)
     ).order_by('created_at') if selected_user else []
 
@@ -365,7 +365,7 @@ def messages_page(request, user_id=None):
     context = {
         'contacts': contacts,
         'selected_user': selected_user,
-        'messages': messages,
+        'chat_messages': chat_messages,  # Changed from 'messages' to 'chat_messages'
     }
     return render(request, 'messages_page.html', context)
 
@@ -424,16 +424,18 @@ def admin_page(request):
 
 @login_required
 def user_detail(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    products = Product.objects.filter(user=user)
-    comments_received = Comment.objects.filter(seller=user)
-    is_own_profile = request.user == user
-    is_following = Follower.objects.filter(user=user, follower=request.user).exists()
+    profile_user = get_object_or_404(User, id=user_id)  # The profile being viewed
+    logged_user = request.user  # The logged-in user
 
-    # Get followers if the user is viewing their own profile
+    products = Product.objects.filter(user=profile_user)
+    comments_received = Comment.objects.filter(seller=profile_user)
+    is_own_profile = logged_user == profile_user
+    is_following = Follower.objects.filter(user=profile_user, follower=logged_user).exists()
+
+    # Get followers if the logged-in user is viewing their own profile
+    followers = None
     if is_own_profile:
-        followers = Follower.objects.filter(user=user)
-        followers = [follower.follower for follower in followers]
+        followers = [follower.follower for follower in Follower.objects.filter(user=profile_user)]
 
     if request.method == "POST":
         action = request.POST.get("action")
@@ -442,12 +444,12 @@ def user_detail(request, user_id):
         if action == "toggle_follow" and not is_own_profile:
             if is_following:
                 # Unfollow
-                Follower.objects.filter(user=user, follower=request.user).delete()
-                messages.success(request, f"You have unfollowed {user.username}.")
+                Follower.objects.filter(user=profile_user, follower=logged_user).delete()
+                messages.success(request, f"You have unfollowed {profile_user.username}.")
             else:
                 # Follow
-                Follower.objects.create(user=user, follower=request.user)
-                messages.success(request, f"You are now following {user.username}.")
+                Follower.objects.create(user=profile_user, follower=logged_user)
+                messages.success(request, f"You are now following {profile_user.username}.")
             return redirect('user_detail', user_id=user_id)
 
         # Handle New Comment Submission
@@ -458,14 +460,15 @@ def user_detail(request, user_id):
                 Comment.objects.create(
                     text=text,
                     rating=int(rating),
-                    user=request.user,
-                    seller=user
+                    user=logged_user,
+                    seller=profile_user
                 )
                 messages.success(request, "Your comment has been added.")
                 return redirect('user_detail', user_id=user_id)
 
     return render(request, 'user_detail.html', {
-        'user': user,
+        'user': profile_user,  # Pass the profile user to the template
+        'logged_user': logged_user,    # Pass the logged-in user to the template
         'comments_received': comments_received,
         'products': products,
         'is_own_profile': is_own_profile,

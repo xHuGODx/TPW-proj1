@@ -62,14 +62,14 @@
             <li class="nav-item me-3 me-lg-0 dropdown">
               <a class="nav-link dropdown-toggle" id="navbarDropdown1" role="button" data-mdb-toggle="dropdown"
                 aria-expanded="false" data-bs-toggle='dropdown' href="/">
-                <img src="{{ user.get_image }}" alt="{{ user.username }}" class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover;">
+                <img src="{{ logged_user.get_image }}" alt="{{ user.username }}" class="rounded-circle" style="width: 35px; height: 35px; object-fit: cover;">
               </a>
               
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown1">
                 <li>
                   <a class="dropdown-item" href="{% url 'user_detail' user.id %}">Profile</a>
                 </li>
-                {% if user.admin %} <!-- Nao é isto que queremos, temporario -->
+                {% if logged_user.admin %} <!-- Nao é isto que queremos, temporario -->
                   <li>
                     <a class="dropdown-item" href="{% url 'admin_page' %}">Admin Page</a>
                   </li>
