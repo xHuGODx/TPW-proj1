@@ -43,10 +43,10 @@
                                 <form method="post" action="{% url 'following' %}" style="display: inline;">
                                     {% csrf_token %}
                                     <input type="hidden" name="product_id" value="{{ product.id }}">
-                                    {% if user and product.id in favourite_products %}
-                                        <button type="submit" class="btn btn-danger flex-grow-1">❤️ Remove from Favourites</button>
+                                    {% if user and product.id in favorite_products %}
+                                        <button type="submit" class="btn btn-danger flex-grow-1">❤️ Remove from Favorites</button>
                                     {% else %}
-                                        <button type="submit" class="btn btn-primary flex-grow-1">❤️ Add to Favourites</button>
+                                        <button type="submit" class="btn btn-primary flex-grow-1">❤️ Add to Favorites</button>
                                     {% endif %}
                                 </form>
                             </div>

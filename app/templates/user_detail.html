@@ -100,15 +100,17 @@
                     <p>Price: ${{ product.price }}</p>
                     <p>Seller: {{ product.user.name }}</p>
                     <button class="btn btn-info" onclick="window.location.href='{% url 'product_details' product.id %}'">Open</button>
-                    <form method="post" action="{% url 'index' %}" style="display: inline-block;">
-                        {% csrf_token %}
-                        <input type="hidden" name="product_id" value="{{ product.id }}">
-                        {% if user.is_authenticated and product.id in favorite_products %}
-                            <button type="submit" class="btn btn-danger">❤️ Remove from Favorites</button>
-                        {% else %}
-                            <button type="submit" class="btn btn-primary">❤️ Add to Favorites</button>
-                        {% endif %}
-                    </form>
+                    {% if user.id != product.user.id %}
+                        <form method="post" action="{% url 'index' %}" style="display: inline-block;">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            {% if user.is_authenticated and product.id in favorite_products %}
+                                <button type="submit" class="btn btn-danger">❤️ Remove from Favorites</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-primary">❤️ Add to Favorites</button>
+                            {% endif %}
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         </div>

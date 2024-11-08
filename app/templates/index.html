@@ -59,15 +59,17 @@
                         </button>
             
                         <!-- Favorite Button -->
-                        <form method="post" action="{% url 'index' %}" style="display: inline;">
-                            {% csrf_token %}
-                            <input type="hidden" name="product_id" value="{{ product.id }}">
-                            {% if user and product.id in favorite_products %}
-                                <button type="submit" class="btn btn-danger flex-grow-1">❤️ Remove from Favorites</button>
-                            {% else %}
-                                <button type="submit" class="btn btn-primary flex-grow-1">❤️ Add to Favorites</button>
-                            {% endif %}
-                        </form>
+                        {% if user.id != product.user.id %}
+                            <form method="post" action="{% url 'index' %}" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                {% if user and product.id in favorite_products %}
+                                    <button type="submit" class="btn btn-danger flex-grow-1">❤️ Remove from Favorites</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-primary flex-grow-1">❤️ Add to Favorites</button>
+                                {% endif %}
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>

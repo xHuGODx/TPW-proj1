@@ -56,7 +56,7 @@ class Product(models.Model):
         return self.image.url if self.image else None
 
 # Favourites Model
-class Favourite(models.Model):
+class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favourites')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorited_by')
 
