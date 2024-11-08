@@ -13,12 +13,12 @@
 
 {% block content %}
 <div class="container">
-    <div class="row">
+    <h1 class="display-4">{{ product.name }}</h1>
+    <div class="row mt-3">
         <div class="col-md-6">
-            <h1 class="display-4">{{ product.name }}</h1>
             <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid rounded" style="max-width: 90%; height: auto; object-fit: cover;">
         </div>
-        <div class="col-md-6" style="margin-top: 110px;">
+        <div class="col-md-6">
             <div class="product-details">
                 <p><strong>Description:</strong> <span class="text-muted">{{ product.description }}</span></p>
                 <p><strong>Price:</strong> <span class="text-success">${{ product.price }}</span></p>
