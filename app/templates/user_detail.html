@@ -94,7 +94,7 @@
     {% for product in products %}
         <div class="col-md-4 mb-4">
             <div class="product-card" style="height: 500px;">
-                <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 20px;">
+                <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid" style="width: 100%; height: 300px; object-fit: contain; margin-bottom: 20px;">
                 <div class="info">
                     <h5>{{ product.name }}</h5>
                     <p>Price: ${{ product.price }}</p>

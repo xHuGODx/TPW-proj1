@@ -1,64 +1,51 @@
 {% extends "layout.html" %}
-
 {% load static %}
 
 {% block content %}
 
-<head>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-
-<div class="jumbotron text-align text-center"">
+<div class="jumbotron text-center">
     <h1>Products</h1>
     <p class="lead">Discover a variety of Star Wars items available for purchase.</p>
 </div>
 
-<div class="search-container">
-    <form method="get" action="{% url 'index' %}" class="form-inline">
-        <div class="form-group">
-            <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ search_query }}">
+<div class="search-container mb-4 d-flex justify-content-center">
+    <form method="get" action="{% url 'index' %}" class="row gx-3 align-items-end">
+        <div class="col-auto">
+            {{ form.search }}
         </div>
-        <div class="form-group">
-            <select name="category" class="form-control">
-                <option value="">All Categories</option>
-                {% for category in categories %}
-                    <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category }}</option>
-                {% endfor %}
-            </select>
+        <div class="col-auto">
+            {{ form.category }}
         </div>
-        <div class="form-group">
-            <input type="number" name="min_price" class="form-control" placeholder="Min Price" value="{{ min_price }}">
+        <div class="col-auto">
+            {{ form.min_price }}
         </div>
-        <div class="form-group">
-            <input type="number" name="max_price" class="form-control" placeholder="Max Price" value="{{ max_price }}">
+        <div class="col-auto">
+            {{ form.max_price }}
         </div>
-        <button type="submit" class="btn btn-primary">🔍 Search</button>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">🔍 Search</button>
+        </div>
     </form>
-</div>  
+</div>
 
 <div class="row">
     {% for product in products %}
-        {% if not product.sold %}  <!-- Skip if the product is sold -->
+        {% if not product.sold %}
             <div class="col-md-4">
                 <div class="product-card rounded shadow-sm p-3" style="height: 550px;">
-                    <!-- Product Image -->
-                    <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid rounded mb-3" style="width: 100%; height: 300px; object-fit: cover;">
-            
-                    <!-- Product Info -->
+                    <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid rounded mb-3" style="width: 100%; height: 300px; object-fit: contain;">
+                    
                     <div class="info">
                         <h3 class="fw-bold">{{ product.name }}</h3>
                         <p class="text-muted">Price: ${{ product.price }}</p>
                         <p class="text-muted">Seller: {{ product.user.name }}</p>
                     </div>
-            
-                    <!-- Buttons at the bottom -->
+                    
                     <div class="d-flex justify-content-between mt-auto pt-3">
-                        <!-- View Product Button -->
                         <button class="btn btn-info flex-grow-1 me-1" onclick="window.location.href='{% url 'product_details' product.id %}'">
                             Open
                         </button>
-            
-                        <!-- Favorite Button -->
+
                         {% if user.id != product.user.id %}
                             <form method="post" action="{% url 'index' %}" style="display: inline;">
                                 {% csrf_token %}
