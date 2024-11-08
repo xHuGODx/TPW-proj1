@@ -41,6 +41,11 @@ cena de pdf da compra
 percentagem do scam
 (deve faltar algo)
 ```
+# Notas 5
+```
+falta:
+update readme
+```
 
 # Membros do Grupo
 
