@@ -32,33 +32,37 @@
     {% for product in products %}
         {% if not product.sold %}
             <div class="col-md-4">
-                <div class="product-card rounded shadow-sm p-3" style="height: 550px;">
+                <div class="product-card rounded shadow-sm p-3 border mt-4" style="height: 550px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <!-- Product Image -->
                     <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid rounded mb-3" style="width: 100%; height: 300px; object-fit: contain;">
                     
+                    <!-- Product Info -->
                     <div class="info">
                         <h3 class="fw-bold">{{ product.name }}</h3>
                         <p class="text-muted">Price: ${{ product.price }}</p>
                         <p class="text-muted">Seller: {{ product.user.name }}</p>
                     </div>
                     
-                    <div class="d-flex justify-content-between mt-auto pt-3">
+                    <!-- Buttons at the bottom -->
+                    <div class="d-flex justify-content-between mt-auto">
                         <button class="btn btn-info flex-grow-1 me-1" onclick="window.location.href='{% url 'product_details' product.id %}'">
                             Open
                         </button>
-
+                
                         {% if user.id != product.user.id %}
-                            <form method="post" action="{% url 'index' %}" style="display: inline;">
+                            <form method="post" action="{% url 'index' %}" style="display: inline; width: 100%;">
                                 {% csrf_token %}
                                 <input type="hidden" name="product_id" value="{{ product.id }}">
                                 {% if user and product.id in favorite_products %}
-                                    <button type="submit" class="btn btn-danger flex-grow-1">❤️ Remove from Favorites</button>
+                                    <button type="submit" class="btn btn-danger w-100">❤️ Remove from Favorites</button>
                                 {% else %}
-                                    <button type="submit" class="btn btn-primary flex-grow-1">❤️ Add to Favorites</button>
+                                    <button type="submit" class="btn btn-primary w-100">❤️ Add to Favorites</button>
                                 {% endif %}
                             </form>
                         {% endif %}
                     </div>
                 </div>
+                
             </div>
         {% endif %}
     {% endfor %}
