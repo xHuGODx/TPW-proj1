@@ -76,7 +76,7 @@ def index(request):
     # Check if the user is authenticated
     if request.user.is_authenticated:
         # Get the user's favorites if logged in
-        user_favorites = Favourite.objects.filter(user=request.user).values_list('product_id', flat=True)
+        user_favorites = Favorite.objects.filter(user=request.user).values_list('product_id', flat=True)
         context['favorite_products'] = list(user_favorites)  # Pass favorite product IDs to context
 
         # Handle adding/removing favorites
@@ -85,7 +85,7 @@ def index(request):
             product = Product.objects.get(id=product_id)
 
             # Check if the user has already favorited the product
-            favorite, created = Favourite.objects.get_or_create(user=request.user, product=product)
+            favorite, created = Favorite.objects.get_or_create(user=request.user, product=product)
 
             if created:
                 # If it was created, that means we added it to favorites
@@ -104,34 +104,34 @@ def index(request):
 
 
 @login_required
-def favourites(request):
+def favorites(request):
     # Get the logged-in user
     user = request.user
 
     if request.method == "POST":
         product_id = request.POST.get('product_id')
         if product_id:
-            # Attempt to remove the product from favourites
-            Favourite.objects.filter(user=user, product_id=product_id).delete()
+            # Attempt to remove the product from favorites
+            Favorite.objects.filter(user=user, product_id=product_id).delete()
 
             # Redirect to the same page to avoid form resubmission issues
-            return redirect('favourites')  # Make sure to use the correct URL name
+            return redirect('favorites')  # Make sure to use the correct URL name
 
     # Retrieve the favorite products for the user
-    favorite_products_ids = Favourite.objects.filter(user=user).values_list('product_id', flat=True)
+    favorite_products_ids = Favorite.objects.filter(user=user).values_list('product_id', flat=True)
     favorite_products = Product.objects.filter(id__in=favorite_products_ids)
 
     # Get unique categories for the filter (optional)
     categories = Product.objects.values_list('category', flat=True).distinct()
 
-    # Prepare the context for rendering the favourites page
+    # Prepare the context for rendering the favorites page
     context = {
         'products': favorite_products,
         'categories': categories,
         'user': user,
     }
 
-    return render(request, 'favourites.html', context)
+    return render(request, 'favorites.html', context)
 
 
 def register(request):
@@ -172,6 +172,7 @@ def product_details(request, product_id):
 
     # Check if the product is already in the user's cart
     is_in_cart = Cart.objects.filter(user=request.user, product=product).exists()
+    is_in_favorites = Favorite.objects.filter(user=request.user, product=product).exists()
 
     if request.method == "POST":
         if "product_id" in request.POST:  # Handling "Add to Cart" form
@@ -188,13 +189,21 @@ def product_details(request, product_id):
             # Create the message with the formatted text
             Message.objects.create(
                 sender=request.user,
-                receiver=product.user,  # Assuming the seller is the product's user
+                receiver=product.user,  
                 text=formatted_text
             )
+        
+        elif "favorite" in request.POST:  
+            if Favorite.objects.filter(user=request.user, product=product).exists():
+                Favorite.objects.filter(user=request.user, product=product).delete()
+
+            else:
+                Favorite.objects.create(user=request.user, product=product)
 
     context = {
         "product": product,
         "is_in_cart": is_in_cart,
+        "is_in_favorites": is_in_favorites,
     }
     return render(request, 'product_details.html', context)
 
@@ -225,7 +234,7 @@ def following(request):
     # Get the logged-in user's followed users
     followed_users = Follower.objects.filter(follower=request.user).values_list('user', flat=True)
     followed_products = {}
-    favourite_products = list(Favourite.objects.filter(user=request.user).values_list('product_id', flat=True))
+    favorite_products = list(Favorite.objects.filter(user=request.user).values_list('product_id', flat=True))
 
     # Fetch products from followed users
     for user_id in followed_users:
@@ -237,16 +246,16 @@ def following(request):
         product_id = request.POST.get('product_id')
         if product_id:
             product = Product.objects.get(id=product_id)
-            # Check if the product is already in favourites
-            if product.id in favourite_products:
-                Favourite.objects.filter(user=request.user, product=product).delete()  # Remove from favourites
+            # Check if the product is already in favorites
+            if product.id in favorite_products:
+                Favorite.objects.filter(user=request.user, product=product).delete()  
             else:
-                Favourite.objects.create(user=request.user, product=product)  # Add to favourites
-            return redirect('following')  # Redirect to avoid double submission
+                Favorite.objects.create(user=request.user, product=product)  
+            return redirect('following')  
 
     context = {
         'followed_products': followed_products,
-        'favourite_products': favourite_products,
+        'favorite_products': favorite_products,
     }
     return render(request, 'following.html', context)
 

@@ -4,7 +4,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "webproj.settings")
 django.setup()
 
-from app.models import User, Product, Comment, Message, Cart, Favourite, Follower
+from app.models import User, Product, Comment, Message, Cart, Favorite, Follower
 from django.contrib.auth import authenticate, login as auth_login
 
 User.objects.all().delete()
@@ -12,7 +12,7 @@ Product.objects.all().delete()
 Comment.objects.all().delete()
 Cart.objects.all().delete()
 Message.objects.all().delete()
-Favourite.objects.all().delete()
+Favorite.objects.all().delete()
 Follower.objects.all().delete()
 
 user1 = User.objects.create(
@@ -350,19 +350,19 @@ for p in products:
 
 
 # Adding products to user favorites
-Favourite.objects.create(user=user1, product=products[0])
-Favourite.objects.create(user=user1, product=products[4])
-Favourite.objects.create(user=user2, product=products[1])
-Favourite.objects.create(user=user2, product=products[5])
-Favourite.objects.create(user=user2, product=products[12])
-Favourite.objects.create(user=user3, product=products[2])
-Favourite.objects.create(user=user3, product=products[13])
-Favourite.objects.create(user=user4, product=products[3])
-Favourite.objects.create(user=user4, product=products[9])
-Favourite.objects.create(user=user4, product=products[0])
-Favourite.objects.create(user=user5, product=products[8])
-Favourite.objects.create(user=user5, product=products[11])
-Favourite.objects.create(user=user5, product=products[18])
+Favorite.objects.create(user=user1, product=products[0])
+Favorite.objects.create(user=user1, product=products[4])
+Favorite.objects.create(user=user2, product=products[1])
+Favorite.objects.create(user=user2, product=products[5])
+Favorite.objects.create(user=user2, product=products[12])
+Favorite.objects.create(user=user3, product=products[2])
+Favorite.objects.create(user=user3, product=products[13])
+Favorite.objects.create(user=user4, product=products[3])
+Favorite.objects.create(user=user4, product=products[9])
+Favorite.objects.create(user=user4, product=products[0])
+Favorite.objects.create(user=user5, product=products[8])
+Favorite.objects.create(user=user5, product=products[11])
+Favorite.objects.create(user=user5, product=products[18])
 
 # Adding followers to users
 Follower.objects.create(user=user1, follower=user2)

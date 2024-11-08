@@ -13,12 +13,12 @@
 
 {% block content %}
 <div class="container">
-    <div class="row">
+    <h1 class="display-4">{{ product.name }}</h1>
+    <div class="row mt-3">
         <div class="col-md-6">
-            <h1 class="display-4">{{ product.name }}</h1>
             <img src="{{ product.get_image }}" alt="{{ product.name }}" class="img-fluid rounded" style="max-width: 90%; height: auto; object-fit: cover;">
         </div>
-        <div class="col-md-6" style="margin-top: 110px;">
+        <div class="col-md-6">
             <div class="product-details">
                 <p><strong>Description:</strong> <span class="text-muted">{{ product.description }}</span></p>
                 <p><strong>Price:</strong> <span class="text-success">${{ product.price }}</span></p>
@@ -28,14 +28,32 @@
                 <p><strong>Color:</strong> {{ product.color }}</p>
                 <p><strong>Seen:</strong> <span class="text-muted">{{ product.seen }}</span></p>
                 <hr class="my-2">
-                <!-- Add to Cart Button -->
-                <form method="post" action="{% url 'product_details' product.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ product.id }}">
-                    <button type="submit" class="btn btn-lg btn-primary mt-3" {% if is_in_cart %}disabled{% endif %}>
-                        {% if is_in_cart %}Already in Cart{% else %}Add to Cart{% endif %}
-                    </button>
-                </form>
+
+                {% if user.id != product.user.id %}
+                    <div class="d-flex gap-2 mt-3">
+                        <form method="post" action="{% url 'product_details' product.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <button type="submit" class="btn btn-lg btn-info" {% if is_in_cart %}disabled{% endif %}>
+                                {% if is_in_cart %}Already in Cart{% else %}Add to Cart{% endif %}
+                            </button>
+                        </form>
+                        <form method="post" action="{% url 'product_details' product.id %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="favorite" value="{{ product.id }}">
+                            <button type="submit" class="btn btn-lg btn-primary">
+                                {% if is_in_favorites %}❤️ Remove from Favorites{% else %}❤️ Add to Favorites{% endif %}
+                            </button>
+                        </form>
+                    </div>
+                    <form method="post" action="{% url 'user_detail' product.user.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_user_id" value="{{ product.user.id }}">
+                        <button type="submit" class="btn btn-lg btn-secondary mt-3">
+                            View Seller's Profile
+                        </button>
+                    </form>
+                {% endif %}
             </div>
         </div>
     </div>

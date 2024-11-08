@@ -2,105 +2,117 @@
 {% load static %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Admin Page</h2>
+<div class="container">
+    <h2 class="text-center mb-5">Admin Dashboard</h2>
 
     <!-- Section for Products -->
-    <h3>Products</h3>
-    <form method="get" class="form-inline mb-3">
-        <input type="text" name="product_search" placeholder="Search products..." class="form-control mr-2" value="{{ product_query }}">
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-    <ul class="list-group mb-4">
-        {% for product in products %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>
-                    <strong>{{ product.name }}</strong> - Seller: {{ product.user.username }}
-                </span>
-                <span>
-                    <form method="post" class="d-inline">
-                        {% csrf_token %}
-                        <input type="hidden" name="delete_product" value="{{ product.id }}">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                    <a href="{% url 'product_details' product.id %}" class="btn btn-info btn-sm">Open</a>
-                </span>
-            </li>
-        {% empty %}
-            <li class="list-group-item">No products found.</li>
-        {% endfor %}
-    </ul>
+    <div class="mb-5">
+        <h3 class="mb-3">Products</h3>
+        <form method="get" class="d-flex mb-3">
+            <input type="text" name="product_search" placeholder="Search products..." class="form-control me-2" value="{{ product_query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <ul class="list-group shadow-sm rounded">
+            {% for product in products %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ product.name }}</strong><br>
+                        <span class="text-muted">Seller: {{ product.user.username }}</span>
+                    </div>
+                    <div>
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="delete_product" value="{{ product.id }}">
+                            <button type="submit" class="btn btn-danger btn-sm me-1">Delete</button>
+                        </form>
+                        <a href="{% url 'product_details' product.id %}" class="btn btn-info btn-sm">Open</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted text-center">No products found.</li>
+            {% endfor %}
+        </ul>
+    </div>
 
     <!-- Section for Users -->
-    <h3>Users</h3>
-    <form method="get" class="form-inline mb-3">
-        <input type="text" name="user_search" placeholder="Search users..." class="form-control mr-2" value="{{ user_query }}">
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-    <ul class="list-group mb-4">
-        {% for user in users %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>
-                    <strong>{{ user.name }}</strong> - Username: {{ user.username }} - Email: {{ user.email }}
-                </span>
-                <span>
-                    <form method="post" class="d-inline">
-                        {% csrf_token %}
-                        <input type="hidden" name="delete_user" value="{{ user.id }}">
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                    </form>
-                    <a href="{% url 'user_detail' user.id %}" class="btn btn-info btn-sm">Open</a>
-                </span>
-            </li>
-        {% empty %}
-            <li class="list-group-item">No users found.</li>
-        {% endfor %}
-    </ul>
+    <div class="mb-5">
+        <h3 class="mb-3">Users</h3>
+        <form method="get" class="d-flex mb-3">
+            <input type="text" name="user_search" placeholder="Search users..." class="form-control me-2" value="{{ user_query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <ul class="list-group shadow-sm rounded">
+            {% for user in users %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ user.name }}</strong><br>
+                        <span class="text-muted">Username: {{ user.username }}</span><br>
+                        <span class="text-muted">Email: {{ user.email }}</span>
+                    </div>
+                    <div>
+                        <form method="post" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="delete_user" value="{{ user.id }}">
+                            <button type="submit" class="btn btn-danger btn-sm me-1">Delete</button>
+                        </form>
+                        <a href="{% url 'user_detail' user.id %}" class="btn btn-info btn-sm">Open</a>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted text-center">No users found.</li>
+            {% endfor %}
+        </ul>
+    </div>
 
-    <!-- Section for Comments (without Open button) -->
-    <h3>Comments</h3>
-    <form method="get" class="form-inline mb-3">
-        <input type="text" name="comment_search" placeholder="Search comments..." class="form-control mr-2" value="{{ comment_query }}">
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-    <ul class="list-group">
-        {% for comment in comments %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>
-                    <strong>{{ comment.user.username }}</strong> commented on <strong>{{ comment.seller.username }}</strong>: "{{ comment.text }}"
-                </span>
-                <span>
+    <!-- Section for Comments -->
+    <div class="mb-5">
+        <h3 class="mb-3">Comments</h3>
+        <form method="get" class="d-flex mb-3">
+            <input type="text" name="comment_search" placeholder="Search comments..." class="form-control me-2" value="{{ comment_query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <ul class="list-group shadow-sm rounded">
+            {% for comment in comments %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ comment.user.username }}</strong> commented on <strong>{{ comment.seller.username }}</strong>: 
+                        <span class="fst-italic">"{{ comment.text }}"</span>
+                    </div>
                     <form method="post" class="d-inline">
                         {% csrf_token %}
                         <input type="hidden" name="delete_comment" value="{{ comment.id }}">
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
-                </span>
-            </li>
-        {% empty %}
-            <li class="list-group-item">No comments found.</li>
-        {% endfor %}
-    </ul>
-
-    <h3>Orders</h3>
-    <form method="get" class="form-inline mb-3">
-        <input type="text" name="order_search" placeholder="Search orders..." class="form-control mr-2" value="{{ order_query }}">
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
-    <ul class="list-group">
-        {% for order in orders %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <span>
-                    <strong>{{ order.user.username }}</strong> ordered 
-                    {% for product in order.products.all %}
-                        <span>{{ product.name }}{% if not forloop.last %}, {% endif %}</span>
-                    {% endfor %}
-                    on {{ order.date }}.
-                </span>
-            </li>
-        {% empty %}
-            <li class="list-group-item">No orders found.</li>
-        {% endfor %}
-    </ul>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted text-center">No comments found.</li>
+            {% endfor %}
+        </ul>
     </div>
+
+    <!-- Section for Orders -->
+    <div class="mb-5">
+        <h3 class="mb-3">Orders</h3>
+        <form method="get" class="d-flex mb-3">
+            <input type="text" name="order_search" placeholder="Search orders..." class="form-control me-2" value="{{ order_query }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <ul class="list-group shadow-sm rounded">
+            {% for order in orders %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ order.user.username }}</strong> ordered:
+                        {% for product in order.products.all %}
+                            <span class="badge bg-secondary">{{ product.name }}</span>{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                        <br>
+                        <span class="text-muted">on {{ order.date }}</span>
+                    </div>
+                </li>
+            {% empty %}
+                <li class="list-group-item text-muted text-center">No orders found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock %}
