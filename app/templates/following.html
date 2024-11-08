@@ -15,8 +15,13 @@
 <div class="row">
     {% if followed_products %}
         {% for user, products in followed_products.items %}
-            <div class="col-12 mb-4">
-                <h2>{{ user.name|default:user.username }}</h2>
+            <div class="col-12 mb-4 mt-2">
+                <div class="row d-flex align-items-center justify-content-between">
+                    <h2 class="col">{{ user.name|default:user.username }}</h2>
+                    <form method="post" action="." class="col-auto">
+                        <a href="{% url 'user_detail' user.id %}" class="btn btn-primary">View Profile</a>
+                    </form>
+                </div>
                 <hr>
                 <div class="row">
                     {% for product in products %}
