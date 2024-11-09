@@ -55,9 +55,9 @@ class Product(models.Model):
             return self.image.url.replace(".png", "_sold.png")
         return self.image.url if self.image else None
 
-# Favourites Model
+# Favorites Model
 class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favourites')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='favorited_by')
 
     class Meta:
