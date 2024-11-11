@@ -18,6 +18,8 @@ Olx clone, where users can buy and sell star wars themed items.
 
     python3 manage.py runserver
 
+# Aternativly run this script
+
 # Acess this link to view the website deployed
 
 # Users 
