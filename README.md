@@ -1,6 +1,37 @@
 # TPW-proj1
 
-# Membros do Grupo
+# Introduction
+
+Olx clone, where users can buy and sell star wars themed items.
+
+# How to run localy
+
+    Start a venv if you want.
+
+    pip install -r requirements.txt
+
+    python3 manage.py makemigrations
+
+    python3 manage.py migrate
+
+    python3 insertData.py
+
+    python3 manage.py runserver
+
+# Acess this link to view the website deployed
+
+# Users 
+
+| User    | Password     | Admin |
+|:--------|:-------------|:------|
+| joao    | password1    | False |
+| maria   | password2    | False |
+| ricardo | password3    | False |
+| ana     | password4    | False |
+| tiago   | password5    | False |
+| mateus  | password123  | True  |
+
+# Members of the Group
 
 | Nome | NMec |
 |:---|:---:|
@@ -51,3 +82,8 @@
 - Remove any comment
 - Search users and products 
 - View all orders 
+
+
+# How to add a new admin
+
+Create a super user, and give the admin flag in the default admin django page.
