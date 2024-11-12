@@ -20,7 +20,11 @@ Olx clone, where users can buy and sell star wars themed items.
 
 # Aternativly run this script
 
+[setup_and_run.sh](setup_and_run.sh)
+
 # Acess this link to view the website deployed
+
+https://odraude.pythonanywhere.com 
 
 # Users 
 
